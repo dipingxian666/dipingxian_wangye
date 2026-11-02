@@ -1,0 +1,1802 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AI WIKI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<style>
+/* Layout: 연구 서가 — 왼쪽 서가 목록(내비게이션) + 오른쪽 열람대(작업 영역). 등급은 청록 농도 5단계. */
+:root{
+  --bg:#F2F4F3; --surface:#FFFFFF; --sunk:#E8EDEC; --ink:#162427; --muted:#5A6A6D; --line:#D6DEDD;
+  --accent:#0D6B66; --accent-ink:#FFFFFF; --accent-soft:#DDEFED; --mark:#F2D16B; --danger:#B0412F; --ok:#2E7A4E; --warn:#A36A00;
+  --g1:#CAD7D6; --g2:#9DC0BC; --g3:#68A39D; --g4:#33857F; --g5:#0D6B66;
+  --f-display:"Gowun Batang", "Noto Serif KR", "AppleMyungjo", serif;
+  --f-body:"IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:8px; --shadow:0 1px 2px rgba(16,40,40,.06), 0 4px 16px rgba(16,40,40,.05);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1516; --surface:#152022; --sunk:#1B282A; --ink:#E2EBEA; --muted:#92A4A5; --line:#283739;
+  --accent:#4DBDB3; --accent-ink:#06201E; --accent-soft:#16393A; --mark:#B8962E; --danger:#E07A66; --ok:#62BE87; --warn:#D9A43A;
+  --g1:#2A3B3D; --g2:#2F5856; --g3:#33786F; --g4:#3E9C93; --g5:#4DBDB3; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0E1516; --surface:#152022; --sunk:#1B282A; --ink:#E2EBEA; --muted:#92A4A5; --line:#283739;
+  --accent:#4DBDB3; --accent-ink:#06201E; --accent-soft:#16393A; --mark:#B8962E; --danger:#E07A66; --ok:#62BE87; --warn:#D9A43A;
+  --g1:#2A3B3D; --g2:#2F5856; --g3:#33786F; --g4:#3E9C93; --g5:#4DBDB3; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark }
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.3;text-wrap:balance;margin:0}
+h1{font-size:1.75rem} h2{font-size:1.25rem} h3{font-size:1.05rem}
+p{margin:0}
+a{color:var(--accent)}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100%}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:18px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow:auto}
+.brand{padding:0 8px}
+.brand b{font-family:var(--f-display);font-size:1.5rem;letter-spacing:.02em;display:block}
+.brand span{color:var(--muted);font-size:.8rem}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;border-radius:6px;color:var(--muted);font-weight:500}
+.nav button:hover{background:var(--sunk);color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--accent-soft);color:var(--ink)}
+.nav button:focus-visible{outline:2px solid var(--accent)}
+.nav .n{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
+.store{margin-top:auto;font-size:.78rem;color:var(--muted);padding:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);margin-right:6px}
+.dot.on{background:var(--ok)} .dot.local{background:var(--warn)}
+main{padding-block:28px 120px;padding-inline:clamp(16px,3.5vw,44px);min-width:0;max-width:1240px;width:100%}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.page-head>div{min-width:0}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:4px}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:12px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0}
+.panel>h2,.panel>h3{margin-bottom:12px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.btn{cursor:pointer;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 13px;font-weight:500;font-size:.9rem;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{color:var(--danger)}
+.btn.danger.solid{background:var(--danger);border-color:var(--danger);color:#fff}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.sm{padding:4px 9px;font-size:.82rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.f{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);min-width:0}
+input[type=text],input[type=url],input[type=number],input[type=search],select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--ink);width:100%;min-width:0}
+textarea{resize:vertical;line-height:1.65}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex-wrap:wrap}
+.seg button{all:unset;cursor:pointer;padding:6px 12px;font-size:.88rem}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.seg button:focus-visible{outline:2px solid var(--accent)}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--sunk);font-size:.78rem;color:var(--ink)}
+.chip.k{background:var(--accent-soft)}
+.chip.ex{background:var(--mark);color:#3a2c00}
+.gb{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:6px;font-family:var(--f-mono);font-weight:500;font-size:.85rem;color:#fff}
+.gb.g0{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+.gb.g1{background:var(--g1);color:var(--ink)} .gb.g2{background:var(--g2);color:var(--ink)} .gb.g3{background:var(--g3)} .gb.g4{background:var(--g4)} .gb.g5{background:var(--g5)}
+:root[data-theme="dark"] .gb.g3,:root[data-theme="dark"] .gb.g4,:root[data-theme="dark"] .gb.g5{color:#06201E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .gb.g3,:root:not([data-theme="light"]) .gb.g4,:root:not([data-theme="light"]) .gb.g5{color:#06201E}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.kpi b{display:block;font-family:var(--f-mono);font-size:1.6rem;font-weight:500;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:.82rem}
+.hbars{display:flex;flex-direction:column;gap:7px}
+.hbar{display:grid;grid-template-columns:minmax(70px,34%) 1fr 36px;gap:8px;align-items:center;font-size:.85rem}
+.hbar .lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .track{height:12px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.hbar .fill{display:block;height:100%;background:var(--accent);border-radius:3px}
+.hbar .v{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:end;height:170px;padding-top:18px;border-bottom:1px solid var(--line)}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px}
+.col .bar{width:100%;max-width:56px;border-radius:4px 4px 0 0;min-height:2px}
+.col .v{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.collab{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;text-align:center;font-size:.78rem;color:var(--muted);padding-top:6px}
+.cloud{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.cloud span{color:var(--accent);font-weight:500;cursor:pointer}
+.list{display:flex;flex-direction:column}
+.item{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px 4px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item .t{font-weight:600;cursor:pointer}
+.item .t:hover{color:var(--accent)}
+.item .meta{font-size:.82rem;color:var(--muted)}
+.item .kw{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.filters{display:grid;grid-template-columns:minmax(0,2fr) repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.bulk{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ink);color:var(--bg);border-radius:var(--r);padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.bulk .btn{background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 40%,transparent)}
+.drop{border:1.5px dashed var(--line);border-radius:var(--r);padding:26px;text-align:center;background:var(--bg);cursor:pointer}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop b{font-family:var(--f-display);font-size:1.1rem;display:block;margin-bottom:4px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.tabs button{all:unset;cursor:pointer;padding:9px 14px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+.queue{margin-top:14px;display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+.queue div{display:flex;justify-content:space-between;gap:10px;padding:6px 10px;background:var(--sunk);border-radius:6px}
+.prose{line-height:1.8;max-width:72ch}
+.prose h2{font-size:1.12rem;margin:1.4em 0 .5em;padding-top:.6em;border-top:1px solid var(--line)}
+.prose h2:first-child{margin-top:0;border-top:0;padding-top:0}
+.prose h3{font-size:1rem;margin:1.1em 0 .4em}
+.prose p{margin:.6em 0}
+.prose blockquote{margin:.8em 0;padding:.4em 1em;border-left:3px solid var(--mark);background:var(--sunk);border-radius:0 6px 6px 0}
+.prose table{border-collapse:collapse;display:block;overflow-x:auto}
+.prose td,.prose th{border:1px solid var(--line);padding:4px 8px}
+.prose code{font-family:var(--f-mono);font-size:.88em;background:var(--sunk);padding:0 4px;border-radius:3px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.kv{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px 10px;align-items:center;font-size:.88rem}
+.kv>span{color:var(--muted)}
+.raw{max-height:420px;overflow:auto;white-space:pre-wrap;font-size:.85rem;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px}
+details>summary{cursor:pointer;font-weight:500}
+.empty{text-align:center;padding:36px 16px;color:var(--muted)}
+.empty b{display:block;font-family:var(--f-display);font-size:1.15rem;color:var(--ink);margin-bottom:6px}
+.chapter{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-bottom:14px}
+.chapter>header{display:flex;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--sunk);border-radius:var(--r) var(--r) 0 0;flex-wrap:wrap}
+.chapter>header input{font-family:var(--f-display);font-weight:700;font-size:1.05rem;background:transparent;border-color:transparent;flex:1 1 220px}
+.sec{padding:12px;border-bottom:1px dashed var(--line);display:flex;flex-direction:column;gap:8px}
+.sec:last-child{border-bottom:0}
+.sec-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sec-head input.st{flex:1 1 200px;font-weight:600}
+.sec-head input.tg{width:90px}
+.cnt{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.cnt.over{color:var(--warn)} .cnt.good{color:var(--ok)}
+.sec .row select{width:auto;flex:0 1 280px}
+.sec textarea{min-height:120px;background:var(--surface)}
+.sec .prose{padding:4px 2px}
+.meter{height:6px;background:var(--sunk);border-radius:3px;overflow:hidden;flex:1 1 120px}
+.meter i{display:block;height:100%;background:var(--accent)}
+.jobbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 10px 8px 16px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);z-index:20;max-width:calc(100% - 32px);font-size:.88rem}
+.jobbar .spin{width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp 0.8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.jobbar .spin{animation:none}}
+.jobbar button{all:unset;cursor:pointer;background:var(--danger);color:#fff;border-radius:999px;padding:3px 12px}
+.toast{position:fixed;right:16px;top:calc(16px + env(safe-area-inset-top,0px));background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);padding:10px 14px;border-radius:6px;box-shadow:var(--shadow);z-index:30;max-width:min(380px,calc(100% - 32px));font-size:.9rem}
+.toast.err{border-left-color:var(--danger)}
+.modal{position:fixed;inset:0;background:rgba(10,20,20,.45);display:grid;place-items:center;z-index:40;padding:16px}
+.modal>div{background:var(--surface);border-radius:10px;padding:20px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:14px;border:1px solid var(--line)}
+.note{font-size:.84rem;color:var(--muted);background:var(--sunk);border-radius:6px;padding:8px 12px}
+.refs{font-size:.92rem;line-height:1.75}
+.btable{border-collapse:collapse;width:100%;font-size:.88rem;min-width:720px}
+.btable th,.btable td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+.btable th{font-weight:600;color:var(--muted);font-size:.8rem;background:var(--sunk)}
+.refs li{margin-bottom:6px;padding-left:4px}
+.refs .src{font-size:.78rem;color:var(--muted)}
+.check{display:flex;gap:8px;align-items:center;font-size:.9rem;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.pickl{max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:var(--bg)}
+.pickl label{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:.88rem}
+.pickl label:last-child{border-bottom:0}
+.mobile-nav{display:none}
+.app>*{min-width:0}
+@media (max-width:900px){ .side{max-width:100vw;width:100%} .app{grid-template-columns:minmax(0,1fr)} }
+.projbox{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.projbox .lbl{font-size:.72rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.projbox select{padding:6px 8px;font-weight:600}
+.nav button[aria-disabled="true"]{opacity:.45}
+.crumb{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);margin-bottom:14px;flex-wrap:wrap}
+.crumb button{all:unset;cursor:pointer;color:var(--muted)} .crumb button:hover{color:var(--accent)} .crumb button:focus-visible{outline:2px solid var(--accent)}
+.crumb b{color:var(--ink);font-weight:600}
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:stretch;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:clamp(20px,3vw,34px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 31px,var(--line) 31px 32px);opacity:.22;pointer-events:none}
+.hero>*{position:relative}
+.htitle{font-size:clamp(2.2rem,5vw,3.4rem);letter-spacing:.01em;line-height:1.05}
+.lead{font-size:1.02rem;color:var(--muted);margin-top:10px;max-width:56ch}
+.btn.lg{padding:10px 18px;font-size:.95rem}
+a.btn{text-decoration:none;color:var(--ink)}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:center}
+.hero-stats div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.hero-stats b{display:block;font-family:var(--f-mono);font-size:1.5rem;font-weight:500;font-variant-numeric:tabular-nums}
+.hero-stats span{font-size:.8rem;color:var(--muted)}
+.newproj{margin-top:16px;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.req{font-size:.7rem;color:var(--danger);margin-left:4px}
+.folderopt{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding:12px;background:var(--sunk);border-radius:8px}
+.folderopt .check{align-items:flex-start}
+.tree{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);display:flex;flex-direction:column;white-space:pre;padding-left:26px}
+.tablewrap{overflow-x:auto;margin:0 -4px;position:relative}
+.ptable{border-collapse:collapse;width:100%;min-width:820px;font-size:.88rem}
+.ptable th{font-size:.76rem;color:var(--muted);font-weight:600;text-align:left;padding:8px;border-bottom:1px solid var(--line);background:var(--sunk);white-space:nowrap}
+.ptable td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.ptable tr.on td{background:var(--accent-soft)}
+.ptable .num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.plink{all:unset;cursor:pointer;font-weight:600} .plink:hover{color:var(--accent)} .plink:focus-visible{outline:2px solid var(--accent)}
+.fchips{display:flex;flex-direction:column;gap:4px}
+.fchip{font-size:.76rem;padding:1px 8px;border-radius:999px;border:1px dashed var(--line);color:var(--muted);white-space:nowrap;width:max-content}
+.fchip.ok{border-style:solid;border-color:var(--ok);color:var(--ok)}
+.linkbtn{all:unset;cursor:pointer;color:var(--accent);text-decoration:underline} .linkbtn[disabled]{opacity:.4;cursor:not-allowed}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.flow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:22px}
+.fnode{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:.8rem;color:var(--muted);min-width:0}
+.fnode b{font-family:var(--f-display);font-size:1rem;color:var(--ink)}
+.fno{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--f-mono);font-size:.78rem}
+.fnode:not(:last-child)::after{content:"→";position:absolute;right:-18px;top:50%;transform:translateY(-50%);color:var(--accent);font-weight:700}
+.floop{margin-top:14px;font-size:.84rem;color:var(--muted);display:flex;gap:8px;align-items:center;border-top:1px dashed var(--line);padding-top:10px}
+.floop span{color:var(--accent);font-size:1.2rem}
+.guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.gcard p{font-size:.88rem;color:var(--muted)}
+.gno{font-family:var(--f-mono);font-size:.78rem;color:var(--accent)}
+.steps{margin-bottom:16px}
+.todo{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px}
+.todo li{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.9rem}
+.todo li .btn{margin-left:auto}
+.todo li.ok{color:var(--muted);background:var(--sunk)}
+.tick{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:.75rem;flex:none}
+.todo li.ok .tick{background:var(--ok);border-color:var(--ok);color:#fff}
+@media (max-width:1100px){ .flow{grid-template-columns:repeat(4,minmax(0,1fr))} .fnode:nth-child(4)::after{content:none} }
+@media (max-width:900px){ .hero{grid-template-columns:1fr} .projbox{margin:0;flex-direction:row;align-items:center;padding:4px 8px} .projbox .lbl{display:none} .projbox select{min-width:150px} }
+@media (max-width:640px){ .flow{grid-template-columns:1fr;gap:20px} .fnode:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-19px;transform:translateX(-50%)} .fnode:nth-child(4)::after{content:"↓"} }
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;height:auto;flex-direction:row;align-items:center;padding:8px 12px;gap:10px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto}
+  .brand span,.store{display:none}
+  .brand b{font-size:1.1rem;white-space:nowrap}
+  .nav{flex-direction:row}
+  .nav button{white-space:nowrap;padding:7px 10px}
+  .nav .n{display:none}
+  .split{grid-template-columns:1fr}
+  .filters{grid-template-columns:1fr 1fr}
+  .filters>:first-child{grid-column:1/-1}
+}
+@media (max-width:520px){ .item{grid-template-columns:auto auto minmax(0,1fr)} .item>.acts{grid-column:3} h1{font-size:1.4rem}}
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><b>AI WIKI</b><span>연구 자료 · 분석 · 집필</span></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="store" id="store"><div><span class="dot"></span>저장소 연결 중</div></div>
+  </aside>
+  <main id="main"></main>
+</div>
+<div id="jobbar" class="jobbar" hidden><span class="spin"></span><span id="jobtxt">AI 작업 중</span><button id="jobstop" type="button">중지</button></div>
+<div id="toast" class="toast" hidden></div>
+<div id="modal" class="modal" hidden></div>
+<input type="file" id="filePick" multiple hidden>
+
+<script data-app>
+(() => {
+"use strict";
+/* ---------- 상수 ---------- */
+const CH = {pdf:"PDF", hwpx:"HWPX", web:"웹", drive:"구글 드라이브", riss:"RISS", kci:"KCI", obsidian:"Obsidian", ai:"AI 생성", manual:"직접 입력"};
+const GD="Google Drive", FC="host:firecrawl-mcp";
+const KINDS = ["학술논문","학위논문","보고서","단행본","기사","웹문서","강의자료","메모","기타"];
+const GL = {5:"핵심",4:"주요",3:"참고",2:"간접",1:"무관",0:"미분류"};
+const WKINDS = ["학술논문","학위논문","강의노트"];
+const DEPTH = {
+  "초급":"쉬운 용어와 짧은 문장, 개념 정의와 예시 중심, 전문용어는 처음 나올 때 풀어서 설명",
+  "중급":"표준 학술 문체, 주요 개념 정의와 선행연구 연결, 논리적 단락 구성",
+  "고급":"이론 간 논쟁 검토, 비판적 분석, 정교한 논증과 반론 고려",
+  "전문가":"해당 분야 전문가 독자 기준, 최신 쟁점과 방법론적 엄밀성, 연구의 독창적 기여를 분명히 서술"
+};
+const TEXT_LIMIT = 60000;
+const NAV = [
+  ["home","대문"],["dash","대시보드"],["collect","자료 수집"],["library","자료 라이브러리"],["analysis","종합 분석"],
+  ["thesis","내 논문"],["refs","참고문헌"],["write","AI 집필"],["exchange","Obsidian·드라이브"]
+];
+
+/* ---------- 상태 ---------- */
+const S = {
+  sources:[], drafts:[], thesis:{field:"",topic:"",keywords:[],outline:"",insight:""},
+  view:"home", all:[], allDrafts:[], projects:[], pid:null,
+  np:{name:"", topic:"", field:"", keywords:"", desc:"", drive:true, obs:true}, showNew:false,
+  srcId:null, draftId:null, tab:"pdf",
+  f:{q:"",topic:"",ch:"",kind:"",grade:"",sort:"new"}, sel:new Set(),
+  live:{}, mode:"loading", queue:[], preview:false,
+  refOpt:{min:3, style:"apa", attr:true, group:true, mode:"list"},
+  drive:{q:"", items:[], picked:new Set(), busy:false, note:""}, acad:{site:"kci", q:"", items:[], busy:false, note:""}, dsync:{q:".md", items:[], busy:false},
+  syn:{ids:new Set(), view:"", type:"종합 분석 보고서"},
+  exp:{scope:"all", min:1}
+};
+const cap = {db:null, sample:null, mcp:null, dl:null, assets:null, user:null};
+
+/* ---------- 유틸 ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const now = () => new Date().toISOString();
+const fmtDate = iso => { try{ const d=new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;}catch{return ""} };
+const n = x => Number(x)||0;
+const clip = (s,k) => { s=String(s||""); return s.length>k ? s.slice(0,k)+"…" : s; };
+function md(s){
+  s = String(s||"");
+  try{ const h = window.marked ? marked.parse(s) : "<p>"+esc(s).replace(/\n/g,"<br>")+"</p>";
+       return window.DOMPurify ? DOMPurify.sanitize(h) : esc(s); }catch{ return "<pre>"+esc(s)+"</pre>"; }
+}
+let toastT;
+function toast(msg, err){ const t=$("#toast"); t.textContent=msg; t.className="toast"+(err?" err":""); t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true, err?6000:3200); }
+function ask(text, okLabel="삭제", danger=true){
+  return new Promise(res=>{
+    const m=$("#modal");
+    m.innerHTML=`<div role="dialog" aria-modal="true"><p>${esc(text)}</p><div class="row" style="justify-content:flex-end"><button class="btn" id="mNo" type="button">취소</button><button class="btn ${danger?"danger solid":"primary"}" id="mOk" type="button">${esc(okLabel)}</button></div></div>`;
+    m.hidden=false; $("#mOk").focus();
+    const done=v=>{m.hidden=true; m.innerHTML=""; res(v);};
+    $("#mNo").onclick=()=>done(false); $("#mOk").onclick=()=>done(true);
+    m.onclick=e=>{ if(e.target===m) done(false); };
+  });
+}
+const debouncers = new Map();
+function debounce(key, fn, ms=700){ clearTimeout(debouncers.get(key)); debouncers.set(key, setTimeout(fn, ms)); }
+function loadScript(src){ return new Promise((ok,no)=>{ if(document.querySelector(`script[src="${src}"]`)) return ok(); const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=()=>no(new Error("라이브러리를 불러오지 못했습니다: "+src)); document.head.appendChild(s); }); }
+async function needPdf(){ if(window.pdfjsLib && window.pdfjsWorker) return; await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"); await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"); }
+async function needZip(){ if(window.JSZip) return; await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"); }
+const len = s => String(s||"").length;
+
+/* ---------- 저장소 ---------- */
+const LKEY = "aiwiki.v1";
+const queues = new Map();
+function enqueue(key, fn){ const p=(queues.get(key)||Promise.resolve()).then(fn); queues.set(key, p.catch(()=>{})); return p; }
+function plain(o){ return JSON.parse(JSON.stringify(o)); }
+const PKEY="aiwiki.pid";
+function curProj(){ return S.projects.find(p=>p.id===S.pid)||null; }
+function byUpd(a,b){ return String(b.updatedAt||b.createdAt||"").localeCompare(String(a.updatedAt||a.createdAt||"")); }
+function legacyPid(){ const a=[...S.projects].sort((x,y)=>String(x.createdAt||"").localeCompare(String(y.createdAt||""))); return a[0]?.id||null; }
+const pidOf = x => x.pid || legacyPid();
+function scope(){
+  if(S.pid && !curProj()) S.pid=null;
+  S.sources=sortDocs(S.all.filter(s=>pidOf(s)===S.pid));
+  S.drafts=S.allDrafts.filter(d=>pidOf(d)===S.pid).sort(byUpd);
+  const p=curProj();
+  if(p){ p.thesis={field:"",topic:"",keywords:[],outline:"",insight:"", ...(p.thesis||{})}; S.thesis=p.thesis; }
+  else S.thesis={field:"",topic:"",keywords:[],outline:"",insight:""};
+}
+function restorePid(){ let id=null; try{ id=localStorage.getItem(PKEY); }catch{} if(id && S.projects.some(p=>p.id===id)) S.pid=id; }
+function setProject(id){
+  S.pid=id; try{ id?localStorage.setItem(PKEY,id):localStorage.removeItem(PKEY); }catch{}
+  S.sel.clear(); S.srcId=null; S.draftId=null; S.syn={ids:new Set(), view:"", type:"종합 분석 보고서"};
+  S.drive.items=[]; S.drive.picked=new Set(); S.drive.note=""; S.acad.items=[]; S.acad.note=""; S.queue=[];
+  scope();
+}
+function persistLocal(){ if(S.mode==="db") return; try{ localStorage.setItem(LKEY, JSON.stringify({v:2, projects:S.projects, sources:S.all, drafts:S.allDrafts})); }catch(e){ toast("브라우저 저장 공간이 부족합니다. 데이터를 JSON으로 내보내 백업하세요.", true); } }
+function upgradeLegacy(j){
+  if(j.projects) return j;
+  const t=j.thesis||{}; const pid="p_"+uid();
+  if(!(j.sources||[]).length && !(j.drafts||[]).length && !t.topic) return {projects:[], sources:[], drafts:[]};
+  return {projects:[{id:pid, name:t.topic?clip(t.topic,40):"내 첫 프로젝트", desc:"", thesis:t, folders:{}, createdAt:now(), updatedAt:now()}],
+    sources:(j.sources||[]).map(s=>({...s, pid:s.pid||pid})), drafts:(j.drafts||[]).map(d=>({...d, pid:d.pid||pid}))};
+}
+function loadLocal(){ try{ let j=null; try{ j=JSON.parse(localStorage.getItem(LKEY)||"null"); }catch{} if(!j && window.AIWIKI_SEED) j=window.AIWIKI_SEED; if(j){ j=upgradeLegacy(j); S.projects=j.projects||[]; S.all=j.sources||[]; S.allDrafts=j.drafts||[]; } }catch{} restorePid(); scope(); }
+function dbErr(e){ const c=e&&e.code; if(c==="quota_exceeded") toast("저장 용량이 가득 찼습니다. 쓰지 않는 자료를 삭제하세요.", true); else if(c==="invalid_argument") toast("저장하지 못했습니다(문서가 너무 크거나 권한이 없습니다).", true); else toast("저장 중 문제가 생겼습니다. 잠시 후 다시 시도하세요.", true); }
+const Store = {
+  saveSource(src){
+    src.pid=src.pid||S.pid; src.updatedAt=now();
+    const i=S.all.findIndex(x=>x.id===src.id); if(i<0) S.all.unshift(src); else S.all[i]=src; scope();
+    if(S.mode==="db"){ const {id,...body}=src; return enqueue("s/"+id, ()=>cap.db.doc("sources/"+id).set(plain(body))).catch(dbErr); }
+    persistLocal(); return Promise.resolve();
+  },
+  deleteSource(id){
+    S.all=S.all.filter(x=>x.id!==id); S.sel.delete(id); scope();
+    if(S.mode==="db") return enqueue("s/"+id, ()=>cap.db.doc("sources/"+id).delete()).catch(dbErr);
+    persistLocal(); return Promise.resolve();
+  },
+  saveDraft(d){
+    d.pid=d.pid||S.pid; d.updatedAt=now();
+    const i=S.allDrafts.findIndex(x=>x.id===d.id); if(i<0) S.allDrafts.unshift(d); else S.allDrafts[i]=d; scope();
+    if(S.mode==="db"){ const {id,...body}=d; return enqueue("d/"+id, ()=>cap.db.doc("drafts/"+id).set(plain(body))).catch(dbErr); }
+    persistLocal(); return Promise.resolve();
+  },
+  deleteDraft(id){
+    S.allDrafts=S.allDrafts.filter(x=>x.id!==id); scope();
+    if(S.mode==="db") return enqueue("d/"+id, ()=>cap.db.doc("drafts/"+id).delete()).catch(dbErr);
+    persistLocal(); return Promise.resolve();
+  },
+  saveProject(p){
+    p.updatedAt=now();
+    const i=S.projects.findIndex(x=>x.id===p.id); if(i<0) S.projects.unshift(p); else S.projects[i]=p; scope();
+    if(S.mode==="db"){ const {id,...body}=p; return enqueue("p/"+id, ()=>cap.db.doc("projects/"+id).set(plain(body))).catch(dbErr); }
+    persistLocal(); return Promise.resolve();
+  },
+  deleteProject(id){
+    S.projects=S.projects.filter(x=>x.id!==id); if(S.pid===id) setProject(null); else scope();
+    if(S.mode==="db") return enqueue("p/"+id, ()=>cap.db.doc("projects/"+id).delete()).catch(dbErr);
+    persistLocal(); return Promise.resolve();
+  },
+  saveThesis(){ const p=curProj(); if(!p) return Promise.resolve(); p.thesis=S.thesis; return Store.saveProject(p); }
+};
+function sortDocs(arr){ return arr.sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||""))); }
+async function boot(){
+  render();
+  const c = window.claude;
+  const use = name => (c && c.use) ? c.use(name).catch(()=>null) : Promise.resolve(null);
+  const [db,sample,mcp,dl,assets,user] = await Promise.all(["db","sample","mcp","downloads","assets","user"].map(use));
+  Object.assign(cap,{db,sample,mcp,dl,assets,user});
+  let owner = false; try{ owner = user ? await user.isOwner() : false; }catch{}
+  if(db && owner){
+    S.mode="db"; let first=3;
+    const settle=()=>{ scope(); if(first>0 && --first===0){ if(S.pid && S.view==="home" && !S.homePinned) S.view="home"; render(); } else softRender(); };
+    db.collection("projects").onSnapshot(snap=>{ S.projects=snap.docs.map(d=>({...d.data(), id:d.id})); if(!S.pid) restorePid(); settle(); }, e=>toast("프로젝트 목록 동기화가 끊겼습니다. 새로고침하세요.", true));
+    db.collection("sources").onSnapshot(snap=>{ S.all=snap.docs.map(d=>({...d.data(), id:d.id})); settle(); }, e=>toast("자료 목록 동기화가 끊겼습니다. 새로고침하세요.", true));
+    db.collection("drafts").onSnapshot(snap=>{ S.allDrafts=snap.docs.map(d=>({...d.data(), id:d.id})); settle(); }, e=>{});
+  } else {
+    S.mode = db && !owner ? "guest" : "local"; loadLocal(); render();
+  }
+  renderStore();
+}
+function renderStore(){
+  const el=$("#store"); const ai = cap.sample ? "사용 가능" : "이 화면에서 사용 불가";
+  const m = {db:['on',"클라우드 저장 (소유자 전용)"], local:['local',"이 브라우저에만 저장"], guest:['local',"열람자 모드: 이 브라우저에만 저장"], loading:['',"저장소 연결 중"]}[S.mode];
+  el.innerHTML=`<div><span class="dot ${m[0]}"></span>${m[1]}</div><div>AI 기능: ${ai}</div><div>구글 드라이브·웹·RISS·KCI: ${cap.mcp?"연결 시도 가능":"사용 불가"}</div>`;
+}
+
+/* ---------- AI 호출 ---------- */
+let job=null;
+function jobStart(label){ job={ctl:new AbortController(), label}; $("#jobtxt").textContent=label; $("#jobbar").hidden=false; return job.ctl.signal; }
+function jobLabel(label){ if(job){ job.label=label; $("#jobtxt").textContent=label; } }
+function jobEnd(){ job=null; $("#jobbar").hidden=true; }
+$("#jobstop").onclick=()=>{ job?.ctl.abort(); };
+const AI_ERR = {
+  not_granted:"AI 사용이 허용되지 않았습니다. 이 페이지의 권한 설정에서 허용할 수 있습니다.",
+  sampling_disabled:"이 계정에서는 AI 기능을 쓸 수 없습니다.",
+  rate_limited:"요청이 너무 많거나 사용량 한도에 도달했습니다. 잠시 후 다시 시도하세요.",
+  prompt_too_large:"보낼 자료가 너무 깁니다. 자료 수를 줄여 다시 시도하세요.",
+  invalid_json:"AI 응답 형식을 읽지 못했습니다. 다시 시도하세요.",
+  refused:"AI가 이 요청을 처리하지 않았습니다. 요청 내용을 바꿔 보세요.",
+  session_expired:"로그인이 만료되었습니다. 다시 로그인하세요.",
+  empty_completion:"AI가 빈 응답을 보냈습니다. 요청을 단순하게 바꿔 보세요."
+};
+function aiErr(e){ if(!e || e.code==="cancelled") return; toast(AI_ERR[e.code] || (e.message && !e.code ? e.message : "AI 연결이 잠시 끊겼습니다. 다시 시도하세요."), true); }
+function requireAI(){ if(!cap.sample){ toast("AI 기능은 Claude 앱이나 claude.ai에서 이 페이지를 열 때 사용할 수 있습니다.", true); return false; } if(job){ toast("다른 AI 작업이 진행 중입니다. 끝난 뒤 다시 시도하세요."); return false;} return true; }
+async function aiText(prompt, {signal, onText, tier="default"}={}){ const r = await cap.sample(prompt,{signal, onText, modelTier:tier, cache:false}); return r; }
+async function aiJSON(prompt, {signal, tier="default"}={}){ return cap.sample.json(prompt,{signal, modelTier:tier, cache:false}); }
+
+function thesisBlock(){
+  const t=S.thesis;
+  if(!t.topic && !(t.keywords||[]).length && !t.outline) return "[내 논문]\n(아직 입력되지 않음)";
+  return `[내 논문]\n분야: ${t.field||"-"}\n주제: ${t.topic||"-"}\n키워드: ${(t.keywords||[]).join(", ")||"-"}\n개요:\n${clip(t.outline||"-",3000)}`;
+}
+function cite(s){ const a=s.author||"저자 미상", y=s.year||"n.d."; return `${a} (${y})`; }
+function srcBrief(s, i, k=700){
+  return `[S${i}] ${s.title} — ${cite(s)}${s.publisher?" / "+s.publisher:""} / 관련도 ${s.grade||"?"}등급 / 주제 ${s.topic||"-"}
+요약: ${s.summary||clip(s.text,400)}
+${s.myView?"연구자 관점: "+clip(s.myView,400)+"\n":""}${s.touch?"논문 접점: "+clip(s.touch,300)+"\n":""}${s.analysis?"분석 발췌: "+clip(s.analysis.replace(/\n+/g," "),k):""}`;
+}
+
+/* 분류 */
+async function classify(src, signal, tier="default"){
+  const topics=[...new Set(S.sources.map(s=>s.topic).filter(Boolean))].slice(0,30);
+  const prompt=`너는 학술 연구 사서이자 논문 지도교수다. 아래 자료를 분류하고 내 논문과의 관련도를 평가하라.
+
+${thesisBlock()}
+
+[기존 주제 분류] ${topics.join(", ")||"(없음)"}
+가능하면 기존 주제 중에서 고르고, 맞는 것이 없을 때만 새 주제를 만든다.
+
+[자료]
+제목: ${src.title}
+수집 경로: ${CH[src.ch]||src.ch}
+${src.url?"URL: "+src.url+"\n":""}본문 앞부분:
+${String(src.text||"").slice(0,7000)}
+
+[관련도 등급 기준]
+5 핵심: 내 논문의 핵심 주장이나 방법에 직접 인용할 자료
+4 주요: 주요 근거나 선행연구로 쓸 자료
+3 참고: 배경과 맥락 설명에 쓸 자료
+2 간접: 주변 주제로 제한적으로만 참고
+1 무관: 내 논문과 거의 관련 없음
+내 논문 정보가 비어 있으면 자료 자체의 학술적 가치를 기준으로 3을 중심에 두고 판단한다.
+
+다음 JSON 객체 하나만 답하라:
+{"topic":"대주제(2~10자)","keywords":["핵심어 5~8개"],"kind":"${KINDS.join("|")} 중 하나","grade":1~5 정수,"gradeReason":"등급 근거 1~2문장","summary":"3~4문장 요약","author":"저자(모르면 빈 문자열)","year":"발행연도 4자리(모르면 빈 문자열)","publisher":"학술지·기관·출판사·사이트명(모르면 빈 문자열)","touch":"내 논문과의 접점 1~2문장"}`;
+  const j = await aiJSON(prompt,{signal, tier});
+  const g = Math.max(1,Math.min(5,Math.round(n(j.grade))||3));
+  src.topic = String(j.topic||src.topic||"").trim();
+  src.keywords = Array.isArray(j.keywords) ? j.keywords.map(String).slice(0,10) : (src.keywords||[]);
+  src.kind = KINDS.includes(j.kind) ? j.kind : (src.kind||"기타");
+  src.grade = g; src.gradeReason = String(j.gradeReason||""); src.gradeBy="AI";
+  src.summary = String(j.summary||src.summary||"");
+  if(!src.author && j.author) src.author=String(j.author);
+  if(!src.year && j.year) src.year=String(j.year);
+  if(!src.publisher && j.publisher) src.publisher=String(j.publisher);
+  if(j.touch) src.touch=String(j.touch);
+  return src;
+}
+async function classifyMany(list){
+  if(!list.length){ toast("분류할 자료가 없습니다."); return; }
+  if(!requireAI()) return;
+  const signal=jobStart(`AI 분류 0/${list.length}`); let ok=0;
+  try{
+    for(let i=0;i<list.length;i++){
+      if(signal.aborted) break;
+      jobLabel(`AI 분류 ${i+1}/${list.length} · ${clip(list[i].title,24)}`);
+      const s = S.sources.find(x=>x.id===list[i].id); if(!s) continue;
+      const c = {...s};
+      await classify(c, signal, list.length>3?"quick":"default");
+      await Store.saveSource(c); ok++; softRender();
+    }
+    toast(`${ok}건을 분류했습니다.`);
+  }catch(e){ aiErr(e); }
+  finally{ jobEnd(); softRender(); }
+}
+
+/* ---------- 수집 ---------- */
+function newSource(o){ return {id:uid(), title:"제목 없음", ch:"manual", kind:"", text:"", url:"", author:"", year:"", publisher:"", topic:"", keywords:[], grade:0, gradeReason:"", summary:"", myView:"", analysis:"", touch:"", insight:"", createdAt:now(), ...o}; }
+function trimText(t){ t=String(t||"").replace(/\u0000/g,"").replace(/[ \t]+\n/g,"\n").replace(/\n{3,}/g,"\n\n").trim(); return t.length>TEXT_LIMIT ? {text:t.slice(0,TEXT_LIMIT), cut:t.length} : {text:t, cut:0}; }
+async function pdfText(file){
+  await needPdf();
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;
+  let out=[], meta={};
+  try{ const m=await pdf.getMetadata(); meta={title:m?.info?.Title||"", author:m?.info?.Author||""}; }catch{}
+  for(let p=1;p<=pdf.numPages;p++){
+    const pg = await pdf.getPage(p); const tc = await pg.getTextContent();
+    let line="", lines=[]; let lastY=null;
+    for(const it of tc.items){ const y=it.transform?it.transform[5]:0; if(lastY!==null && Math.abs(y-lastY)>2){ lines.push(line); line=""; } line+=it.str; lastY=y; }
+    lines.push(line);
+    out.push(`[p.${p}]\n`+lines.join("\n"));
+    if(out.join("\n").length>TEXT_LIMIT*1.2) { out.push(`[이하 ${pdf.numPages-p}쪽 생략]`); break; }
+  }
+  return {text:out.join("\n\n"), pages:pdf.numPages, meta};
+}
+async function hwpxText(file){
+  await needZip();
+  const zip = await JSZip.loadAsync(await file.arrayBuffer());
+  const names = Object.keys(zip.files).filter(k=>/^Contents\/section\d+\.xml$/i.test(k)).sort((a,b)=>n(a.match(/\d+/)[0])-n(b.match(/\d+/)[0]));
+  let parts=[];
+  for(const nm of names){
+    const xml = await zip.file(nm).async("string");
+    const doc = new DOMParser().parseFromString(xml,"application/xml");
+    const paras = doc.getElementsByTagNameNS("*","p");
+    for(const p of paras){ const ts=p.getElementsByTagNameNS("*","t"); let s=""; for(const t of ts) s+=t.textContent; if(s.trim()) parts.push(s); }
+  }
+  if(!parts.length && zip.file("Preview/PrvText.txt")) parts=[await zip.file("Preview/PrvText.txt").async("string")];
+  let title="";
+  const hdr = zip.file("Contents/content.hpf");
+  if(hdr){ const x=await hdr.async("string"); const m=x.match(/<opf:title>([^<]*)<\/opf:title>/); if(m) title=m[1]; }
+  return {text:parts.join("\n"), title};
+}
+async function ingestFiles(files, kind){
+  const auto = $("#optAuto")?.checked ?? true;
+  const keep = $("#optKeep")?.checked ?? false;
+  const made=[];
+  for(const f of files){
+    const q={name:f.name, st:"읽는 중"}; S.queue.unshift(q); renderQueue();
+    try{
+      const ext=f.name.split(".").pop().toLowerCase();
+      let src;
+      if(ext==="pdf"){
+        const r=await pdfText(f); const t=trimText(r.text);
+        src=newSource({ch:"pdf", title:r.meta.title && r.meta.title.length>3 ? r.meta.title : f.name.replace(/\.pdf$/i,""), author:r.meta.author||"", text:t.text, fileName:f.name, pages:r.pages, cut:t.cut});
+        if(!t.text.trim()) q.note="본문 텍스트가 없습니다(스캔 이미지 PDF일 수 있음)";
+        if(keep && cap.assets){
+          q.st="원문 보관 중"; renderQueue();
+          try{ const up=await cap.assets.upload(f,{type:"application/pdf"}); src.pdfAsset=up.id; }
+          catch(e){ q.note=(e.code==="too_large"?"원문이 20MB를 넘어 보관하지 못했습니다":"원문 보관 실패"); }
+        }
+      } else if(ext==="hwpx"){
+        const r=await hwpxText(f); const t=trimText(r.text);
+        src=newSource({ch:"hwpx", title:r.title||f.name.replace(/\.hwpx$/i,""), text:t.text, fileName:f.name, cut:t.cut});
+      } else if(ext==="hwp"){
+        throw new Error("HWP(구버전)는 읽을 수 없습니다. 한글에서 HWPX로 저장해 올려 주세요.");
+      } else { throw new Error("지원하지 않는 형식입니다"); }
+      await Store.saveSource(src); made.push(src);
+      q.st="저장됨"; q.id=src.id; renderQueue();
+    }catch(e){ q.st="실패"; q.note=e.message||String(e); renderQueue(); }
+  }
+  softRender();
+  if(auto && made.length && cap.sample) await classifyMany(made);
+}
+async function scrapeWeb(url){
+  if(!cap.mcp) throw {code:"no_mcp"};
+  const r = await cap.mcp.callTool("host:firecrawl-mcp","firecrawl_scrape",{url, formats:["markdown"], onlyMainContent:true});
+  let p=r.payload, mdx="", title="";
+  if(typeof p==="string"){ mdx=p; }
+  else if(p && typeof p==="object"){ mdx=p.markdown||p.data?.markdown||p.content||""; title=p.metadata?.title||p.data?.metadata?.title||p.title||""; }
+  if(!mdx) mdx=(r.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  try{ const j=JSON.parse(mdx); if(j && j.markdown){ mdx=j.markdown; title=title||j.metadata?.title||""; } }catch{}
+  if(!title){ const m=mdx.match(/^#\s+(.+)$/m); if(m) title=m[1].trim(); }
+  return {md:mdx, title};
+}
+const MCP_ERR = {
+  server_not_connected:"웹 수집 도구(Firecrawl)가 이 기기에 연결되어 있지 않습니다. 아래에 본문을 직접 붙여 넣어 저장하세요.",
+  not_in_manifest:"웹 수집 도구 사용이 허용되지 않았습니다. 본문을 직접 붙여 넣어 저장하세요.",
+  needs_reauth:"웹 수집 도구를 다시 연결해야 합니다.",
+  tool_error:"이 페이지를 가져오지 못했습니다. 주소를 확인하거나 본문을 직접 붙여 넣으세요.",
+  server_unavailable:"웹 수집 도구가 응답하지 않습니다. 잠시 후 다시 시도하세요.",
+  cancelled:"웹 수집을 취소했습니다.",
+  no_mcp:"이 화면에서는 웹 자동 수집을 쓸 수 없습니다. 본문을 직접 붙여 넣어 저장하세요."
+};
+
+/* ---------- 연결 도구(MCP) 공통 ---------- */
+function payloadOf(r){ let p=r?.payload; if(p==null) p=(r?.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n"); if(typeof p==="string"){ try{ return JSON.parse(p); }catch{} } return p; }
+function findItems(o, test, out=[], d=0){ if(o==null||d>7) return out; if(typeof o==="string"){ if(d<2){ try{ findItems(JSON.parse(o),test,out,d+1); }catch{} } return out; } if(Array.isArray(o)){ for(const x of o) findItems(x,test,out,d+1); return out; } if(typeof o==="object"){ if(test(o)) out.push(o); else for(const v of Object.values(o)) findItems(v,test,out,d+1); } return out; }
+const schemaCache={};
+const ALIAS={query:/^(query|q|search|search_?query|keywords?|term)$/i, id:/^(file_?id|id|document_?id|drive_?file_?id)$/i, title:/^(title|name|file_?name)$/i, content:/^(content|text|body|data|file_?content)$/i, mime:/^(mime_?type|content_?type)$/i, limit:/^(limit|page_?size|max_?results|n|count)$/i, parent:/^(parent|parent_?id|folder_?id|parents)$/i};
+const DEF={query:"query", id:"fileId", title:"title", content:"content", mime:"mimeType", limit:"pageSize", parent:"parentId"};
+async function argsFor(server, tool, want){
+  if(!(tool in schemaCache)){ try{ schemaCache[tool]=(await cap.mcp.describeTool(server,tool))?.inputSchema?.properties||null; }catch{ schemaCache[tool]=null; } }
+  const props=schemaCache[tool], out={};
+  for(const [k,v] of Object.entries(want)){ if(v==null||v==="") continue; let key=DEF[k];
+    if(props){ const hit=Object.keys(props).find(x=>ALIAS[k].test(x)); if(hit) key=hit; else if(k!=="query"&&k!=="id"&&k!=="title"&&k!=="content") continue; }
+    else if(k==="limit"||k==="parent") continue;
+    if(props && props[key] && props[key].type==="array" && !Array.isArray(v)) v=[v];
+    out[key]=v; }
+  return out;
+}
+async function mcall(server, tool, want){ if(!cap.mcp) throw {code:"no_mcp"}; return cap.mcp.callTool(server, tool, await argsFor(server, tool, want), {cache:false}); }
+const DRIVE_ERR={server_not_connected:"Google Drive가 연결되어 있지 않습니다. claude.ai 설정 → 커넥터에서 Google Drive를 연결한 뒤 다시 시도하세요.", needs_reauth:"Google Drive를 다시 연결해야 합니다. claude.ai 설정 → 커넥터에서 다시 연결하세요.", not_in_manifest:"이 페이지의 Google Drive 사용이 허용되지 않았습니다. 페이지 권한에서 허용하세요.", selection_required:"연결된 Google Drive 계정이 여러 개입니다. 표시되는 창에서 하나를 고르세요.", blocked_by_policy:"조직 정책으로 Google Drive 사용이 막혀 있습니다.", tool_error:"Google Drive가 요청을 처리하지 못했습니다.", server_unavailable:"Google Drive가 잠시 응답하지 않습니다. 잠시 후 다시 시도하세요.", no_mcp:"이 화면에서는 연결 도구를 쓸 수 없습니다. Claude 앱이나 claude.ai에서 여세요."};
+const isDriveFile = o => (o.id||o.fileId) && (o.name||o.title);
+function driveName(f){ return String(f.name||f.title||"이름 없음"); }
+function driveId(f){ return String(f.id||f.fileId); }
+async function driveSearch(q){
+  const tries=[q, `fullText contains '${q.replace(/'/g,"")}'`];
+  let lastErr=null;
+  for(const query of tries){
+    try{ const r=await mcall(GD,"search_files",{query, limit:50}); const items=findItems(payloadOf(r), isDriveFile); if(items.length) return items; }
+    catch(e){ lastErr=e; if(e.code && e.code!=="tool_error") throw e; }
+  }
+  if(lastErr) throw lastErr; return [];
+}
+async function driveFind(){
+  const D=S.drive; if(D.busy) return;
+  const t=S.thesis; const kws=(D.q.trim()? D.q.split(/[,，;；]/) : [t.topic, ...(t.keywords||[])]).map(x=>String(x||"").trim()).filter(Boolean).slice(0,8);
+  if(!kws.length){ toast("검색어를 입력하거나 '내 논문'에 주제와 키워드를 입력하세요."); return; }
+  D.busy=true; D.items=[]; D.picked=new Set(); D.note="드라이브 검색 중…"; render();
+  try{
+    const seen=new Map();
+    for(const k of kws){ D.note=`드라이브 검색 중… '${clip(k,20)}'`; softRender(); for(const f of await driveSearch(k)){ const id=driveId(f); if(!seen.has(id)) seen.set(id,{id, name:driveName(f), mime:String(f.mimeType||f.mime_type||""), modified:String(f.modifiedTime||f.modified_time||""), hit:k}); } }
+    let list=[...seen.values()].filter(f=>!/folder|shortcut|image\/|video\/|audio\//i.test(f.mime));
+    const have=new Set(S.sources.map(s=>s.driveId).filter(Boolean)); list.forEach(f=>f.have=have.has(f.id));
+    if(list.length && cap.sample){
+      D.note=`후보 ${list.length}건 중 관련 자료 20건을 AI가 고르는 중…`; softRender();
+      try{
+        const j=await aiJSON(`너는 연구 사서다. 아래 구글 드라이브 파일 목록에서 내 논문과 관련성이 높은 파일을 최대 20개 골라 관련도 순으로 정렬하라.\n\n${thesisBlock()}\n\n[파일 목록]\n${list.slice(0,150).map((f,i)=>`${i+1}. ${f.name} (${f.mime||"?"}) — 검색어: ${f.hit}`).join("\n")}\n\nJSON만 답하라: {"picks":[{"no":번호,"score":1~5,"reason":"한 줄 근거"}]}`,{tier:"quick"});
+        const picks=(j.picks||[]).map(p=>({...list[n(p.no)-1], score:n(p.score), reason:String(p.reason||"")})).filter(x=>x.id);
+        const rest=list.filter(f=>!picks.some(p=>p.id===f.id));
+        list=[...picks, ...rest];
+        picks.slice(0,20).forEach(p=>{ if(!p.have) D.picked.add(p.id); });
+      }catch(e){ list.slice(0,20).forEach(f=>{ if(!f.have) D.picked.add(f.id); }); }
+    } else list.slice(0,20).forEach(f=>{ if(!f.have) D.picked.add(f.id); });
+    D.items=list; D.note=list.length?`${list.length}건을 찾았습니다. 관련도가 높은 ${D.picked.size}건을 골라 두었습니다.`:"검색 결과가 없습니다. 검색어를 바꿔 보세요.";
+  }catch(e){ D.note=DRIVE_ERR[e.code]||"드라이브를 검색하지 못했습니다."; toast(D.note,true); }
+  finally{ D.busy=false; render(); }
+}
+function textOfRead(r){
+  const p=payloadOf(r);
+  if(typeof p==="string") return p;
+  if(p && typeof p==="object"){ for(const k of ["content","text","markdown","body","data"]) if(typeof p[k]==="string") return p[k]; }
+  return (r?.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+}
+async function driveImport(){
+  const D=S.drive; const pick=D.items.filter(f=>D.picked.has(f.id)); if(!pick.length){ toast("가져올 파일을 고르세요."); return; }
+  D.busy=true; render(); const made=[];
+  for(let i=0;i<pick.length;i++){ const f=pick[i]; D.note=`가져오는 중 ${i+1}/${pick.length} · ${clip(f.name,30)}`; softRender();
+    try{ const r=await mcall(GD,"read_file_content",{id:f.id}); const t=trimText(textOfRead(r)); if(!t.text) throw {code:"empty"};
+      const ex=S.sources.find(s=>s.driveId===f.id);
+      if(/\.md$/i.test(f.name)){ await importMd(f.name, t.text, {driveId:f.id}); continue; }
+      const src=ex?{...ex, text:t.text, cut:t.cut}:newSource({ch:"drive", title:f.name.replace(/\.(pdf|docx?|hwpx?|txt|md|gdoc)$/i,""), text:t.text, cut:t.cut, fileName:f.name, driveId:f.id, kind:/pdf/i.test(f.mime)?"":"기타"});
+      await Store.saveSource(src); if(!ex) made.push(src); f.have=true; D.picked.delete(f.id);
+    }catch(e){ S.queue.unshift({name:f.name, st:"실패", note:e.code==="empty"?"본문을 읽지 못했습니다":(DRIVE_ERR[e.code]||"읽기 실패")}); }
+  }
+  D.busy=false; D.note=`${made.length}건을 새로 가져왔습니다.`; render();
+  if(made.length && cap.sample) classifyMany(made);
+}
+async function driveExport(){
+  const L=expList(); if(!L.length){ toast("보낼 자료가 없습니다."); return; }
+  if(!(await ask(`자료 ${L.length}건을 Obsidian 노트(.md) 형식으로 구글 드라이브${curProj()?.folders?.drive?` 'AI WIKI/${projFolderName(curProj())}/자료' 폴더`:""}에 저장할까요?`,"드라이브에 저장",false))) return;
+  const signal=jobStart(`드라이브로 보내는 중 0/${L.length}`); let ok=0;
+  try{
+    for(let i=0;i<L.length;i++){ if(signal.aborted) break; const s=L[i]; jobLabel(`드라이브로 보내는 중 ${i+1}/${L.length}`);
+      const name=String(s.title).replace(/[\\/:*?"<>|#^\[\]]/g," ").trim().slice(0,80)+".md";
+      try{ await mcall(GD,"create_file",{title:name, content:srcMarkdown(s), mime:"text/markdown", parent:curProj()?.folders?.drive?.subs?.["자료"]||curProj()?.folders?.drive?.id}); ok++; }
+      catch(e){ if(e.code && e.code!=="tool_error"){ toast(DRIVE_ERR[e.code]||"드라이브에 저장하지 못했습니다.",true); break; } }
+    }
+    const idx=L.map(s=>`- [[${String(s.title).replace(/[\\/:*?"<>|#^\[\]]/g," ").trim().slice(0,80)}]] · ${n(s.grade)}등급 · ${s.topic||""}`).join("\n");
+    if(ok) await mcall(GD,"create_file",{title:`AI WIKI 색인 ${stamp()}.md`, content:`# ${curProj()?.name||"AI WIKI"} 색인 (${stamp()})\n\n${idx}\n`, mime:"text/markdown", parent:curProj()?.folders?.drive?.id}).catch(()=>{});
+    toast(`${ok}건을 구글 드라이브에 저장했습니다. 드라이브를 Obsidian 볼트와 동기화하면 노트로 열립니다.`);
+  } finally{ jobEnd(); render(); }
+}
+async function dsyncFind(){
+  const D=S.dsync; D.busy=true; D.items=[]; render();
+  try{ const items=await driveSearch(D.q.trim()||".md"); D.items=items.map(f=>({id:driveId(f), name:driveName(f), mime:String(f.mimeType||"")})).filter(f=>/\.(md|txt|json|html?)$/i.test(f.name)||/markdown|text\/plain|json|html/i.test(f.mime)); if(!D.items.length) toast("드라이브에서 노트 파일을 찾지 못했습니다."); }
+  catch(e){ toast(DRIVE_ERR[e.code]||"드라이브를 검색하지 못했습니다.",true); }
+  finally{ D.busy=false; render(); }
+}
+async function dsyncImport(){
+  const D=S.dsync; if(!D.items.length) return; D.busy=true; render(); let made=0, up=0;
+  for(const f of D.items){ try{ const txt=textOfRead(await mcall(GD,"read_file_content",{id:f.id})); if(!txt) continue;
+      if(/\.json$/i.test(f.name)){ const file=new File([txt], f.name); await importExchange([file]); continue; }
+      if(/\.html?$/i.test(f.name)){ await importExchange([new File([txt], f.name)]); continue; }
+      (await importMd(f.name, txt, {driveId:f.id})) ? up++ : made++;
+    }catch(e){ if(e.code && e.code!=="tool_error"){ toast(DRIVE_ERR[e.code]||"읽기 실패",true); break; } } }
+  D.busy=false; toast(`드라이브에서 새 노트 ${made}건, 갱신 ${up}건을 가져왔습니다.`); render();
+}
+/* RISS · KCI 초록 */
+const ACAD={kci:{label:"KCI", host:"kci.go.kr"}, riss:{label:"RISS", host:"riss.kr"}};
+async function acadSearch(){
+  const A=S.acad; if(A.busy) return; const site=ACAD[A.site];
+  const q=(A.q.trim()||[S.thesis.topic,...(S.thesis.keywords||[]).slice(0,2)].filter(Boolean).join(" ")).trim();
+  if(!q){ toast("검색어를 입력하세요."); return; }
+  A.busy=true; A.items=[]; A.note=`${site.label}에서 '${clip(q,30)}' 검색 중…`; render();
+  try{
+    const url = A.site==="riss"
+      ? `https://www.riss.kr/search/Search.do?isDetailSearch=N&searchGubun=true&viewYn=OP&colName=re_a_kor&query=${encodeURIComponent(q)}`
+      : `https://www.kci.go.kr/kciportal/po/search/poTotalSearList.kci?sereArticleSearchBean.searType=all&sereArticleSearchBean.searText=${encodeURIComponent(q)}`;
+    const r=await cap.mcp.callTool(FC,"firecrawl_scrape",{url, formats:["markdown","links"], onlyMainContent:true}, {cache:false});
+    let pl=payloadOf(r); let md = typeof pl==="string" ? pl : (pl?.markdown||pl?.data?.markdown||JSON.stringify(pl||""));
+    let items=[];
+    if(cap.sample){
+      A.note="검색 결과를 정리하는 중…"; softRender();
+      const j=await aiJSON(`아래는 ${site.label} 논문 검색 결과 페이지다. 검색된 논문 목록을 추출하라. 상세 페이지 URL은 페이지에 있는 링크를 그대로 쓰고, 상대 경로면 https://www.${site.host}를 붙인다.\n\n${String(md).slice(0,40000)}\n\nJSON만 답하라: {"papers":[{"title":"","author":"","year":"","publisher":"학술지·발행기관","url":"상세 페이지 URL","abstract":"결과에 보이는 초록 일부(없으면 빈 문자열)"}]}`,{tier:"quick"});
+      items=(j.papers||[]).filter(x=>x&&x.title);
+    } else {
+      items=findItems(pl, o=>typeof o.url==="string" && o.title).map(o=>({title:o.title, url:o.url}));
+    }
+    A.items=items.slice(0,20).map(o=>({url:String(o.url||url), title:String(o.title), desc:[o.author,o.year,o.publisher].filter(Boolean).join(" · ")+(o.abstract?" — "+o.abstract:""), meta:o, have:S.sources.some(s=>s.title===o.title)}));
+    A.note=A.items.length?`${A.items.length}건을 찾았습니다. '초록 가져오기'를 누르면 서지 정보와 초록을 저장합니다.`:"검색 결과가 없습니다. 검색어를 바꾸거나 아래에 초록을 붙여 넣으세요.";
+  }catch(e){ A.note=MCP_ERR[e.code]||"검색하지 못했습니다. 아래에 초록을 붙여 넣어 저장할 수 있습니다."; toast(A.note,true); }
+  finally{ A.busy=false; render(); }
+}
+async function acadExtract(raw, hint){
+  return aiJSON(`아래는 ${hint} 논문 정보 페이지 또는 검색 결과에서 가져온 텍스트다. 논문별 서지 정보와 초록을 추출하라. 텍스트에 없는 값은 빈 문자열로 둔다. 초록은 원문 그대로 옮긴다.
+
+[텍스트]
+${String(raw).slice(0,30000)}
+
+JSON만 답하라: {"papers":[{"title":"논문 제목","author":"저자(여러 명이면 쉼표)","year":"발행연도 4자리","publisher":"학술지명 또는 발행기관","volume":"권(호)","kind":"학술논문|학위논문|보고서|기타","abstract":"초록","keywords":["저자 키워드"],"url":"논문 상세 URL(있으면)"}]}`,{tier:"quick"});
+}
+async function saveAcad(papers, ch, fallbackUrl){
+  const made=[];
+  for(const p of (papers||[])){ if(!p || !(p.title||p.abstract)) continue;
+    const url=String(p.url||fallbackUrl||""); if(url && S.sources.some(s=>s.url===url && s.title===p.title)) continue;
+    const text=`[초록]\n${p.abstract||"(초록 없음)"}\n\n[서지]\n${p.author||""} (${p.year||""}). ${p.title||""}. ${p.publisher||""}${p.volume?", "+p.volume:""}.\n${url}`;
+    const src=newSource({ch, title:String(p.title||"제목 없음"), author:String(p.author||""), year:String(p.year||""), publisher:[p.publisher,p.volume].filter(Boolean).join(", "), kind:KINDS.includes(p.kind)?p.kind:"학술논문", url, text, keywords:Array.isArray(p.keywords)?p.keywords.map(String).slice(0,10):[], abstract:String(p.abstract||"")});
+    await Store.saveSource(src); made.push(src); S.queue.unshift({name:src.title, st:"저장됨", id:src.id});
+  }
+  return made;
+}
+async function acadFetch(url){
+  if(!requireAI()) return; const A=S.acad; const site=ACAD[A.site];
+  const signal=jobStart(`${site.label} 초록 가져오는 중`);
+  try{
+    const r=await cap.mcp.callTool(FC,"firecrawl_scrape",{url, formats:["markdown"], onlyMainContent:true},{signal, cache:false});
+    let md=payloadOf(r); if(md && typeof md==="object") md=md.markdown||md.data?.markdown||JSON.stringify(md);
+    const j=await acadExtract(md, site.label); const papers=(j.papers||[]).slice(0,1).map(p=>({...p, url:p.url||url}));
+    const made=await saveAcad(papers, A.site, url);
+    const it=A.items.find(x=>x.url===url); if(it) it.have=true;
+    toast(made.length?"초록을 저장했습니다.":"이 페이지에서 초록을 찾지 못했습니다.", !made.length);
+    if(made.length) setTimeout(()=>classifyMany(made),0);
+  }catch(e){ if(e.code&&MCP_ERR[e.code]) toast(MCP_ERR[e.code],true); else aiErr(e); }
+  finally{ jobEnd(); render(); }
+}
+async function acadPaste(){
+  const raw=$("#acadPaste")?.value.trim(); if(!raw){ toast("RISS·KCI에서 복사한 초록이나 내보내기 텍스트를 붙여 넣으세요."); return; }
+  if(!requireAI()) return; const A=S.acad;
+  const signal=jobStart(`${ACAD[A.site].label} 초록 정리 중`);
+  try{ const j=await acadExtract(raw, ACAD[A.site].label); const made=await saveAcad(j.papers, A.site, ""); toast(`${made.length}건을 저장했습니다.`); const el=$("#acadPaste"); if(el) el.value=""; if(made.length) setTimeout(()=>classifyMany(made),0); }
+  catch(e){ aiErr(e); }
+  finally{ jobEnd(); render(); }
+}
+
+/* ---------- 분석 ---------- */
+function extractSec(text, num){ const re=new RegExp(`##\\s*${num}\\.[^\\n]*\\n([\\s\\S]*?)(?=\\n##\\s|$)`); const m=String(text).match(re); return m?m[1].trim():""; }
+async function analyzeSource(id){
+  if(!requireAI()) return;
+  const s=S.sources.find(x=>x.id===id); if(!s) return;
+  const signal=jobStart("분석 보고서 작성 중 · "+clip(s.title,20));
+  const prompt=`너는 ${S.thesis.field||"학술"} 분야 연구자의 연구 조교다. 아래 자료를 연구자의 논문 관점에서 분석한 보고서를 한국어 마크다운으로 작성하라.
+
+${thesisBlock()}
+
+[연구자의 관점 — 직접 입력]
+${s.myView||"(입력 없음: 4절은 연구자가 스스로 검토해 볼 질문 3가지로 대신 작성)"}
+
+[자료 정보]
+제목: ${s.title}
+저자/연도: ${cite(s)}
+출처: ${s.publisher||"-"} ${s.url||""}
+분류: ${s.topic||"-"} / ${s.kind||"-"} / 관련도 ${s.grade||"?"}등급
+
+[본문]
+${String(s.text||"").slice(0,45000)}
+
+[형식] 아래 제목을 그대로 쓴다.
+## 1. 핵심 요약
+## 2. 주요 주장과 근거
+## 3. 연구 방법과 자료
+## 4. 내 관점과의 대조
+## 5. 내 논문과의 접점
+## 6. 인사이트와 활용 방안
+## 7. 한계와 비판적 검토
+
+[규칙] 본문에 없는 사실, 수치, 인용문을 지어내지 않는다. 인용할 만한 문장은 > 인용 블록으로 쓰고 본문에 [p.N] 표시가 있으면 쪽수를 함께 적는다. 5절과 6절은 내 논문의 어느 장·절에 쓸 수 있는지 구체적으로 적는다.`;
+  S.live["an:"+id]="";
+  try{
+    const r = await aiText(prompt,{signal, onText:({text})=>{ S.live["an:"+id]=text; const el=$("#anOut"); if(el && S.srcId===id) el.innerHTML=md(text); }});
+    const cur=S.sources.find(x=>x.id===id); if(!cur) return;
+    const u={...cur, analysis:r.text, touch:extractSec(r.text,5)||cur.touch, insight:extractSec(r.text,6), analyzedAt:now()};
+    await Store.saveSource(u);
+    if(r.truncated) toast("보고서가 길어 일부가 잘렸습니다.");
+    else toast("분석 보고서를 저장했습니다.");
+  }catch(e){ aiErr(e); }
+  finally{ delete S.live["an:"+id]; jobEnd(); softRender(true); }
+}
+async function synthesize(){
+  if(!requireAI()) return;
+  const list=S.sources.filter(s=>S.syn.ids.has(s.id));
+  if(list.length<1){ toast("분석할 자료를 1건 이상 고르세요."); return; }
+  const per = Math.max(900, Math.floor(60000/list.length));
+  const body = list.map((s,i)=>srcBrief(s,i+1,per)+(s.analysis?"":`\n본문 발췌: ${String(s.text||"").slice(0,Math.min(per,4000))}`)).join("\n\n");
+  const typeGuide={
+    "종합 분석 보고서":"## 1. 개요\n## 2. 자료별 핵심 정리(표)\n## 3. 공통 논점과 쟁점\n## 4. 내 관점에서 본 평가\n## 5. 내 논문과의 접점\n## 6. 인사이트와 다음 연구 과제",
+    "비교 분석":"## 1. 비교 기준\n## 2. 비교표(자료 × 기준)\n## 3. 일치하는 지점\n## 4. 충돌하는 지점과 원인\n## 5. 내 관점에서의 판단\n## 6. 내 논문에 주는 시사점",
+    "연구 공백 도출":"## 1. 선행연구 지형\n## 2. 충분히 다뤄진 영역\n## 3. 연구 공백(근거 자료 표시)\n## 4. 내 논문이 메울 수 있는 공백\n## 5. 연구 질문 후보 3~5개\n## 6. 필요한 추가 자료"
+  }[S.syn.type];
+  const prompt=`너는 연구자의 선행연구 분석을 돕는 연구 조교다. 아래 자료들을 바탕으로 '${S.syn.type}'를 한국어 마크다운으로 작성하라.
+
+${thesisBlock()}
+
+[연구자의 관점 — 직접 입력]
+${S.syn.view||"(입력 없음)"}
+
+[자료 ${list.length}건]
+${body}
+
+[형식]
+${typeGuide}
+
+[규칙] 주장마다 근거 자료를 [S번호]로 표시한다. 자료에 없는 사실이나 문헌을 지어내지 않는다. 연구자의 관점과 자료가 어긋나는 지점은 분명히 짚는다.`;
+  const signal=jobStart(`${S.syn.type} 작성 중 · 자료 ${list.length}건`);
+  S.live.syn="";
+  try{
+    const r=await aiText(prompt,{signal, tier:"complex", onText:({text})=>{ S.live.syn=text; const el=$("#synOut"); if(el) el.innerHTML=md(text); }});
+    S.syn.last={text:r.text, refs:list.map((s,i)=>`[S${i+1}] ${s.title} — ${cite(s)}`).join("\n")};
+    toast(r.truncated?"보고서가 길어 일부가 잘렸습니다.":"보고서를 작성했습니다. 위키에 저장할 수 있습니다.");
+  }catch(e){ aiErr(e); }
+  finally{ delete S.live.syn; jobEnd(); softRender(true); }
+}
+async function thesisInsight(){
+  if(!requireAI()) return;
+  const list=S.sources.filter(s=>n(s.grade)>=3).sort((a,b)=>n(b.grade)-n(a.grade)).slice(0,30);
+  if(!list.length){ toast("3등급 이상 자료가 아직 없습니다. 자료를 수집하고 분류하세요."); return; }
+  const prompt=`너는 논문 지도교수다. 연구자의 논문 계획과 수집 자료를 대조하여 '논문 접점·인사이트 진단'을 한국어 마크다운으로 작성하라.
+
+${thesisBlock()}
+
+[수집 자료 중 관련도 3등급 이상 ${list.length}건]
+${list.map((s,i)=>srcBrief(s,i+1,500)).join("\n\n")}
+
+[형식]
+## 1. 자료가 뒷받침하는 내 논문의 논점
+## 2. 아직 근거가 약한 논점
+## 3. 개요의 장·절별 활용 자료 배치(표: 장·절 | 자료 | 활용 방식)
+## 4. 새로 보이는 인사이트
+## 5. 추가로 수집할 자료 유형과 검색어
+[규칙] 근거 자료를 [S번호]로 표시하고, 자료에 없는 사실은 쓰지 않는다.`;
+  const signal=jobStart("논문 접점·인사이트 진단 중");
+  S.live.ins="";
+  try{
+    const r=await aiText(prompt,{signal, tier:"complex", onText:({text})=>{ S.live.ins=text; const el=$("#insOut"); if(el) el.innerHTML=md(text); }});
+    S.thesis.insight=r.text; S.thesis.insightRefs=list.map((s,i)=>`[S${i+1}] ${s.title} — ${cite(s)}`).join("\n"); S.thesis.insightAt=now();
+    await Store.saveThesis(); toast("진단 결과를 저장했습니다.");
+  }catch(e){ aiErr(e); }
+  finally{ delete S.live.ins; jobEnd(); softRender(true); }
+}
+
+/* ---------- 참고문헌 ---------- */
+function authorsKR(a){ return a||"저자 미상"; }
+function fmtRef(s, style){
+  const a=authorsKR(s.author), y=s.year||"n.d.", t=s.title||"제목 없음", p=s.publisher||"", u=s.url||"";
+  const ko=/[가-힣]/.test(t);
+  switch(style){
+    case "kci": return ko ? `${a}(${y}), 「${t}」${p?`, 『${p}』`:""}.${u?` ${u}`:""}` : `${a}(${y}), "${t}"${p?`, ${p}`:""}.${u?` ${u}`:""}`;
+    case "chicago": return `${a}. ${y}. "${t}."${p?` ${p}.`:""}${u?` ${u}.`:""}`;
+    case "mla": return `${a}. "${t}."${p?` ${p},`:""} ${y}.${u?` ${u}.`:""}`;
+    default: return `${a} (${y}). ${t}.${p?` ${p}.`:""}${u?` ${u}`:""}`;
+  }
+}
+function srcAttr(s){ const parts=[CH[s.ch]||s.ch]; if(s.fileName) parts.push(s.fileName); if(s.url) parts.push(s.url); if(s.kind) parts.push(s.kind); return parts.join(" · "); }
+function refList(){ return S.sources.filter(s=>n(s.grade)>=S.refOpt.min && s.ch!=="ai").sort((a,b)=> n(b.grade)-n(a.grade) || authorsKR(a.author).localeCompare(authorsKR(b.author),"ko")); }
+function refsText(withGrade=true){
+  const L=refList(), o=S.refOpt; let out=[];
+  const one = s => fmtRef(s,o.style) + (o.attr?`  [출처: ${srcAttr(s)}]`:"") + (withGrade?`  (관련도 ${s.grade}등급)`:"");
+  if(o.group){ for(const g of [5,4,3,2,1]){ const a=L.filter(s=>n(s.grade)===g); if(a.length){ out.push(`■ ${g}등급 · ${GL[g]} (${a.length}건)`); a.forEach(s=>out.push(one(s))); out.push(""); } } }
+  else { const a=[...L].sort((x,y)=>authorsKR(x.author).localeCompare(authorsKR(y.author),"ko")); a.forEach(s=>out.push(one(s))); }
+  return out.join("\n").trim();
+}
+
+/* ---------- 집필 ---------- */
+function newDraft(){
+  return {id:uid(), title:S.thesis.topic||"새 원고", kind:"학술논문", depth:"중급", target:8000, minGrade:3, toc:[], createdAt:now()};
+}
+function curDraft(){ return S.drafts.find(d=>d.id===S.draftId); }
+function draftSources(d){ return S.sources.filter(s=>n(s.grade)>=n(d.minGrade||3)).sort((a,b)=>n(b.grade)-n(a.grade)).slice(0,14); }
+function tocText(d, mark){ return d.toc.map(c=>`${c.title}\n`+c.secs.map(s=>`  - ${s.title} (${s.target||0}자)${s.id===mark?"  ◀ 이번 절":""}`).join("\n")).join("\n"); }
+function draftLen(d){ return d.toc.reduce((a,c)=>a+c.secs.reduce((b,s)=>b+len(s.content),0),0); }
+async function recommendToc(){
+  const d=curDraft(); if(!d||!requireAI()) return;
+  if(d.toc.some(c=>c.secs.some(s=>s.content)) && !(await ask("이미 쓴 본문이 있습니다. 목차를 새로 추천받으면 현재 목차와 본문이 바뀝니다. 계속할까요?","새로 추천",false))) return;
+  const srcs=draftSources(d);
+  const prompt=`너는 ${d.kind} 집필 지도 전문가다. 아래 조건에 맞는 목차를 설계하라.
+
+${thesisBlock()}
+
+[작성 조건]
+제목(가제): ${d.title||"-"}
+작성 유형: ${d.kind}
+작성 심도: ${d.depth} — ${DEPTH[d.depth]}
+목표 분량: 한글 ${d.target}자(공백 포함)
+
+[활용할 자료 ${srcs.length}건]
+${srcs.map((s,i)=>`[S${i+1}] ${s.title} (${cite(s)}) — ${clip(s.summary,160)}`).join("\n")||"(없음)"}
+
+[유형별 구성 관례]
+학술논문: 서론 / 이론적 배경·선행연구 / 연구 방법 / 연구 결과 / 논의 / 결론 (분량이 적으면 4~5장으로 줄인다)
+학위논문: 서론 / 이론적 배경 / 연구 방법 / 연구 결과 / 논의 / 결론 및 제언, 장마다 절 2~4개
+강의노트: 학습 목표 / 핵심 개념 / 사례와 예시 / 심화 내용 / 정리와 확인 문제
+
+[규칙] 모든 절의 target 합계가 ${d.target}에 가깝게 한다. 절 하나는 250~3000자. 장 제목에는 로마 숫자, 절 제목에는 번호를 붙인다.
+다음 JSON만 답하라:
+{"title":"제목","chapters":[{"title":"Ⅰ. 서론","sections":[{"title":"1. 연구의 배경과 필요성","target":800,"brief":"이 절에서 다룰 내용 한 문장"}]}]}`;
+  const signal=jobStart("목차 추천 중");
+  try{
+    const j=await aiJSON(prompt,{signal});
+    const chs=Array.isArray(j.chapters)?j.chapters:[];
+    if(!chs.length) throw {code:"invalid_json"};
+    const cur=curDraft(); if(!cur) return;
+    cur.title = j.title ? String(j.title) : cur.title;
+    cur.toc = chs.map(c=>({id:uid(), title:String(c.title||"장"), secs:(Array.isArray(c.sections)?c.sections:[]).map(s=>({id:uid(), title:String(s.title||"절"), target:Math.max(200,Math.round(n(s.target)||600)), brief:String(s.brief||""), content:"", prev:""}))}));
+    await Store.saveDraft(cur); toast("목차를 추천했습니다. 제목과 분량을 고친 뒤 집필하세요.");
+  }catch(e){ aiErr(e); }
+  finally{ jobEnd(); render(); }
+}
+function findSec(d, sid){ for(const c of d.toc){ const i=c.secs.findIndex(s=>s.id===sid); if(i>=0) return {c, s:c.secs[i], i}; } return {}; }
+function prevText(d, sid){ const flat=d.toc.flatMap(c=>c.secs); const i=flat.findIndex(s=>s.id===sid); for(let k=i-1;k>=0;k--){ if(flat[k].content) return flat[k].content.slice(-1500); } return ""; }
+async function writeSection(sid, signal){
+  const d=curDraft(); const {c,s}=findSec(d,sid); if(!s) return;
+  const srcs=draftSources(d);
+  const prompt=`너는 ${d.kind}을 쓰는 ${S.thesis.field||"해당"} 분야 저자다. 아래 목차 중 지정된 절의 본문만 작성하라.
+
+${thesisBlock()}
+
+[문서]
+제목: ${d.title}
+유형: ${d.kind}
+심도: ${d.depth} — ${DEPTH[d.depth]}
+전체 목표 분량: ${d.target}자
+
+[전체 목차]
+${tocText(d, sid)}
+
+[이번 절]
+장: ${c.title}
+절: ${s.title}
+계획: ${s.brief||"-"}
+목표 분량: 약 ${s.target}자(공백 포함, ±10%)
+
+[바로 앞 절의 끝부분]
+${prevText(d,sid)||"(없음 — 이 절이 첫 절이다)"}
+
+[참고 자료]
+${srcs.map((x,i)=>srcBrief(x,i+1,600)).join("\n\n")||"(없음)"}
+
+[규칙]
+- 절 제목은 쓰지 말고 본문만 마크다운으로 쓴다. 필요하면 ### 소제목, 목록, 표를 쓴다.
+- 앞 절과 자연스럽게 이어지게 쓰되 같은 내용을 반복하지 않는다.
+- 인용은 참고 자료에 있는 것만 (저자, 연도) 형식으로 표시한다. 자료에 없는 문헌, 통계, 인용문을 지어내지 않는다.
+- 근거가 부족한 주장은 문장 끝에 [근거 보강 필요]라고 표시한다.
+${d.kind==="강의노트"?"- 학습자에게 설명하듯 쓰고 핵심 용어는 **굵게** 표시한다. 절 끝에 확인 질문 1~2개를 둔다.":"- 학술 문체(~이다, ~한다)로 쓴다."}`;
+  const key="w:"+sid; S.live[key]="";
+  const r=await aiText(prompt,{signal, onText:({text})=>{ S.live[key]=text; const el=document.getElementById("live-"+sid); if(el) el.innerHTML=md(text); }});
+  delete S.live[key];
+  const cur=curDraft(); const f=findSec(cur,sid); if(!f.s) return;
+  f.s.prev=f.s.content; f.s.content=r.text.trim(); await Store.saveDraft(cur);
+}
+async function writeMany(ids, label){
+  if(!requireAI()) return;
+  const signal=jobStart(label);
+  try{
+    for(let i=0;i<ids.length;i++){
+      if(signal.aborted) break;
+      const d=curDraft(); const {s}=findSec(d,ids[i]); if(!s) continue;
+      jobLabel(`${label} ${i+1}/${ids.length} · ${clip(s.title,22)}`);
+      render(); await writeSection(ids[i], signal); render();
+    }
+    if(!signal.aborted) toast("집필을 마쳤습니다.");
+  }catch(e){ aiErr(e); }
+  finally{ Object.keys(S.live).filter(k=>k.startsWith("w:")).forEach(k=>delete S.live[k]); jobEnd(); render(); }
+}
+async function reviseSection(sid, instr){
+  if(!instr){ toast("수정 지시를 입력하거나 고르세요."); return; }
+  if(!requireAI()) return;
+  const d=curDraft(); const {s}=findSec(d,sid); if(!s||!s.content){ toast("수정할 본문이 없습니다."); return; }
+  const prompt=`아래 글을 지시에 따라 수정하라. 수정된 본문 전체만 마크다운으로 출력하고 설명은 붙이지 않는다.
+
+[지시] ${instr}
+[문서 조건] 유형 ${d.kind} / 심도 ${d.depth}(${DEPTH[d.depth]}) / 이 절의 목표 분량 약 ${s.target}자
+[규칙] 원문의 인용 표시 (저자, 연도)는 유지하고, 새 문헌이나 수치를 지어내지 않는다.
+
+[원문]
+${s.content}`;
+  const signal=jobStart("AI 수정 중 · "+clip(s.title,20));
+  const key="w:"+sid; S.live[key]="";
+  try{
+    render();
+    const r=await aiText(prompt,{signal, onText:({text})=>{ S.live[key]=text; const el=document.getElementById("live-"+sid); if(el) el.innerHTML=md(text); }});
+    const cur=curDraft(); const f=findSec(cur,sid);
+    f.s.prev=f.s.content; f.s.content=r.text.trim(); await Store.saveDraft(cur); toast("수정했습니다. 마음에 들지 않으면 되돌리기를 누르세요.");
+  }catch(e){ aiErr(e); }
+  finally{ delete S.live[key]; jobEnd(); render(); }
+}
+function draftMarkdown(d, withRefs=true){
+  let out=[`# ${d.title}`,""];
+  for(const c of d.toc){ out.push(`## ${c.title}`,""); for(const s of c.secs){ out.push(`### ${s.title}`,"", s.content||"",""); } }
+  if(withRefs){ const refs=draftSources(d); if(refs.length){ out.push("## 참고문헌",""); refs.sort((a,b)=>authorsKR(a.author).localeCompare(authorsKR(b.author),"ko")).forEach(s=>out.push("- "+fmtRef(s,S.refOpt.style))); } }
+  return out.join("\n");
+}
+
+/* ---------- 내보내기 / 가져오기 ---------- */
+async function saveFile(filename, data){
+  if(!cap.dl){
+    try{ const blob = data instanceof Blob ? data : new Blob([data],{type:"application/octet-stream"}); const u=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=u; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); }
+    catch{ toast("파일을 저장하지 못했습니다.", true); }
+    return; }
+  try{ await cap.dl.save({filename, data}); }
+  catch(e){ if(e.code==="declined") return; if(e.code==="rate_limited") toast("저장 창이 이미 열려 있습니다."); else toast("파일을 저장하지 못했습니다.", true); }
+}
+function expList(){ let L=S.sources; if(S.exp.scope==="grade") L=L.filter(s=>n(s.grade)>=n(S.exp.min)); if(S.exp.scope==="sel") L=L.filter(s=>S.sel.has(s.id)); return L; }
+const stamp = () => new Date().toISOString().slice(0,10);
+function htmlDoc(title, bodyHtml){
+  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>body{font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.75;color:#162427}h1,h2,h3{font-family:"Nanum Myeongjo",serif}article{border-top:1px solid #ccd;padding-top:18px;margin-top:28px}.meta{color:#5a6a6d;font-size:.9em}blockquote{border-left:3px solid #e8b423;margin:0;padding:4px 14px;background:#f5f5f0}pre{white-space:pre-wrap;background:#f4f6f6;padding:12px;font-size:.85em}</style></head><body>${bodyHtml}</body></html>`;
+}
+function srcMarkdown(s){
+  const fm=["---",`title: "${String(s.title).replace(/"/g,"'")}"`,`author: "${s.author||""}"`,`year: "${s.year||""}"`,`publisher: "${(s.publisher||"").replace(/"/g,"'")}"`,`source: "${CH[s.ch]||s.ch}"`,`url: "${s.url||""}"`,`kind: "${s.kind||""}"`,`topic: "${s.topic||""}"`,`grade: ${n(s.grade)}`,`tags: [${(s.keywords||[]).map(k=>`"${String(k).replace(/"/g,"")}"`).join(", ")}]`,`aiwiki_id: "${s.id}"`,`created: ${String(s.createdAt||"").slice(0,10)}`,"---",""];
+  return fm.join("\n")+`# ${s.title}\n\n> 관련도 ${n(s.grade)}등급(${GL[n(s.grade)]}) · ${s.topic||"주제 미분류"}${s.topic?` · [[${s.topic}]]`:""}\n\n## 요약\n${s.summary||""}\n\n## 내 관점\n${s.myView||""}\n\n## 내 논문과의 접점\n${s.touch||""}\n\n## 분석 보고서\n${s.analysis||""}\n\n## 원문\n${s.text||""}\n`;
+}
+async function doExport(fmt){
+  const L=expList();
+  if(!L.length && fmt!=="json"){ toast("내보낼 자료가 없습니다."); return; }
+  if(fmt==="json"){
+    await saveFile(`aiwiki-${stamp()}.json`, JSON.stringify({app:"AI WIKI", version:2, exportedAt:now(), project:{name:curProj()?.name||"", desc:curProj()?.desc||""}, thesis:S.thesis, sources:L, drafts:S.exp.scope==="all"?S.drafts:[]},null,2));
+  } else if(fmt==="txt"){
+    const t=L.map(s=>`==============================\n${s.title}\n${fmtRef(s,"apa")}\n수집: ${srcAttr(s)} | 주제: ${s.topic||"-"} | 관련도: ${n(s.grade)}등급 | 키워드: ${(s.keywords||[]).join(", ")}\n\n[요약]\n${s.summary||""}\n\n[내 관점]\n${s.myView||""}\n\n[분석 보고서]\n${s.analysis||""}\n\n[원문]\n${s.text||""}\n`).join("\n");
+    await saveFile(`aiwiki-${stamp()}.txt`, `AI WIKI 내보내기 (${stamp()})\n${thesisBlock()}\n\n`+t);
+  } else if(fmt==="html"){
+    const toc=L.map((s,i)=>`<li><a href="#s${i}">${esc(s.title)}</a> <span class="meta">${n(s.grade)}등급 · ${esc(s.topic||"")}</span></li>`).join("");
+    const body=L.map((s,i)=>`<article id="s${i}"><h2>${esc(s.title)}</h2><p class="meta">${esc(fmtRef(s,"apa"))}<br>${esc(srcAttr(s))} · 주제 ${esc(s.topic||"-")} · 관련도 ${n(s.grade)}등급 · ${esc((s.keywords||[]).join(", "))}</p><h3>요약</h3>${md(s.summary)}${s.myView?`<h3>내 관점</h3>${md(s.myView)}`:""}${s.analysis?`<h3>분석 보고서</h3>${md(s.analysis)}`:""}<details><summary>원문</summary><pre>${esc(s.text||"")}</pre></details></article>`).join("");
+    await saveFile(`aiwiki-${stamp()}.html`, htmlDoc("AI WIKI 내보내기", `<h1>AI WIKI 내보내기</h1><p class="meta">${stamp()} · 자료 ${L.length}건 · 주제: ${esc(S.thesis.topic||"-")}</p><ol>${toc}</ol>${body}`));
+  } else if(fmt==="vault"){
+    try{ await needZip(); }catch(e){ toast(e.message,true); return; }
+    const zip=new JSZip(); const root=zip.folder("AI WIKI").folder(projFolderName(curProj())); const used=new Set();
+    const safe=t=>{ let b=String(t).replace(/[\\/:*?"<>|#^\[\]]/g," ").replace(/\s+/g," ").trim().slice(0,80)||"제목 없음"; let k=b,i=2; while(used.has(k)) k=`${b} (${i++})`; used.add(k); return k; };
+    const idx={};
+    for(const s of L){ const nm=safe(s.title); root.folder("자료").file(nm+".md", srcMarkdown(s)); (idx[s.topic||"주제 미분류"] ||= []).push(`- [[${nm}]] · ${n(s.grade)}등급`); }
+    SUBDIRS.forEach(d=>root.folder(d));
+    root.file("AI WIKI 색인.md", `# ${curProj()?.name||"AI WIKI"} 색인\n\n${thesisBlock().replace("[내 논문]","## 내 논문")}\n\n`+Object.entries(idx).map(([t,a])=>`## ${t}\n${a.join("\n")}`).join("\n\n"));
+    if(S.exp.scope==="all") for(const d of S.drafts) root.folder("원고").file(safe(d.title)+".md", draftMarkdown(d));
+    const blob=await zip.generateAsync({type:"blob"});
+    await saveFile(`aiwiki-obsidian-${stamp()}.zip`, blob);
+  }
+}
+function parseFrontmatter(txt){
+  const m=txt.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/); if(!m) return {fm:{}, body:txt};
+  const fm={}; let lastKey=null;
+  for(const line of m[1].split("\n")){
+    const li=line.match(/^\s*-\s+(.*)$/); if(li && lastKey){ (fm[lastKey]=Array.isArray(fm[lastKey])?fm[lastKey]:[]).push(li[1].replace(/^["']|["']$/g,"")); continue; }
+    const kv=line.match(/^([\w\-]+):\s*(.*)$/); if(!kv) continue; lastKey=kv[1]; let v=kv[2].trim();
+    if(/^\[.*\]$/.test(v)) v=v.slice(1,-1).split(",").map(x=>x.trim().replace(/^["']|["']$/g,"")).filter(Boolean);
+    else v=v.replace(/^["']|["']$/g,"");
+    fm[lastKey]=v===""?[]:v;
+  }
+  return {fm, body:txt.slice(m[0].length)};
+}
+async function importMd(name, txt, extra={}){
+  const {fm, body}=parseFrontmatter(txt);
+  const h=body.match(/^#\s+(.+)$/m);
+  const title=fm.title||(h?h[1].trim():"")||name.replace(/\.(md|txt)$/i,"");
+  const tags=[...(Array.isArray(fm.tags)?fm.tags:fm.tags?[fm.tags]:[]), ...[...body.matchAll(/(^|\s)#([\p{L}\d_\-\/]+)/gu)].map(m=>m[2])];
+  const t=trimText(body);
+  const exist = fm.aiwiki_id && S.sources.find(x=>x.id===fm.aiwiki_id);
+  const base = exist ? {...exist} : newSource({});
+  Object.assign(base,{ch:exist?exist.ch:"obsidian", title, text:exist?exist.text:t.text, keywords:[...new Set(tags)].slice(0,12), fileName:name, ...extra});
+  if(fm.grade) base.grade=n(fm.grade); if(fm.topic) base.topic=fm.topic; if(fm.author) base.author=fm.author; if(fm.year) base.year=fm.year; if(fm.url) base.url=fm.url; if(fm.publisher) base.publisher=fm.publisher;
+  await Store.saveSource(base); return !!exist;
+}
+async function importExchange(files){
+  let made=0, restored=0;
+  for(const f of files){
+    const ext=f.name.split(".").pop().toLowerCase();
+    try{
+      const txt=await f.text();
+      if(ext==="json"){
+        const j=JSON.parse(txt);
+        if(j && j.app==="AI WIKI"){
+          for(const s of (j.sources||[])){ const ex=S.all.find(x=>x.id===s.id); const other=ex && pidOf(ex)!==S.pid; await Store.saveSource({...newSource({}), ...s, pid:S.pid, id:other?uid():(s.id||uid())}); restored++; }
+          for(const d of (j.drafts||[])){ const ex=S.allDrafts.find(x=>x.id===d.id); await Store.saveDraft({...d, pid:S.pid, id:(ex && pidOf(ex)!==S.pid)?uid():(d.id||uid())}); }
+          if(j.thesis && !S.thesis.topic){ S.thesis={...S.thesis, ...j.thesis}; await Store.saveThesis(); }
+        } else {
+          const arr=Array.isArray(j)?j:(j.notes||j.items||[j]);
+          for(const o of arr){ const t=trimText(o.content||o.text||o.body||""); await Store.saveSource(newSource({ch:"obsidian", title:o.title||o.name||f.name, text:t.text, keywords:Array.isArray(o.tags)?o.tags:[], fileName:f.name})); made++; }
+        }
+      } else if(ext==="md"||ext==="txt"){
+        (await importMd(f.name, txt)) ? restored++ : made++;
+      } else if(false){
+        const {fm, body}=parseFrontmatter(txt);
+        const h=body.match(/^#\s+(.+)$/m);
+        const title=fm.title||(h?h[1].trim():"")||f.name.replace(/\.(md|txt)$/i,"");
+        const tags=[...(Array.isArray(fm.tags)?fm.tags:fm.tags?[fm.tags]:[]), ...[...body.matchAll(/(^|\s)#([\p{L}\d_\-\/]+)/gu)].map(m=>m[2])];
+        const t=trimText(body);
+        const exist = fm.aiwiki_id && S.sources.find(x=>x.id===fm.aiwiki_id);
+        const base = exist ? {...exist} : newSource({});
+        Object.assign(base,{ch:exist?exist.ch:"obsidian", title, text:exist?exist.text:t.text, keywords:[...new Set(tags)].slice(0,12), fileName:f.name});
+        if(fm.grade) base.grade=n(fm.grade); if(fm.topic) base.topic=fm.topic; if(fm.author) base.author=fm.author; if(fm.year) base.year=fm.year; if(fm.url) base.url=fm.url; if(fm.publisher) base.publisher=fm.publisher;
+        await Store.saveSource(base); exist?restored++:made++;
+      } else if(ext==="html"||ext==="htm"){
+        const doc=new DOMParser().parseFromString(txt,"text/html");
+        doc.querySelectorAll("script,style,nav,footer").forEach(x=>x.remove());
+        const t=trimText(doc.body?.innerText||doc.body?.textContent||"");
+        await Store.saveSource(newSource({ch:"obsidian", title:doc.title||f.name, text:t.text, fileName:f.name})); made++;
+      } else { toast(`${f.name}: 지원하지 않는 형식입니다.`, true); }
+    }catch(e){ toast(`${f.name}: 읽지 못했습니다 (${e.message||"형식 오류"})`, true); }
+  }
+  toast(`새 자료 ${made}건, 갱신·복원 ${restored}건을 가져왔습니다.`); render();
+}
+
+function buildStandalone(){
+  const c=document.documentElement.cloneNode(true);
+  c.removeAttribute("data-theme"); c.removeAttribute("style");
+  const q=s=>c.querySelector(s);
+  q("#main").innerHTML=""; q("#nav").innerHTML=""; q("#store").innerHTML="";
+  for(const id of ["#modal","#toast","#jobbar"]){ const e=q(id); if(e){ e.hidden=true; if(id!=="#jobbar") e.innerHTML=""; } }
+  c.querySelectorAll("script").forEach(s=>{ const src=s.getAttribute("src")||""; if(s.hasAttribute("data-app")) return; if(/^https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/(marked|dompurify|pdf\.js|jszip)\//.test(src)) return; s.remove(); });
+  const seed=document.createElement("script"); seed.id="aiwiki-seed";
+  seed.textContent="window.AIWIKI_SEED="+JSON.stringify({v:2, projects:S.projects, sources:S.all, drafts:S.allDrafts}).replace(/</g,"\\u003c")+";";
+  q("script[data-app]").before(seed);
+  if(!q('meta[charset]')){ const m=document.createElement("meta"); m.setAttribute("charset","utf-8"); q("head").prepend(m); }
+  return "<!doctype html>\n"+c.outerHTML;
+}
+
+/* ---------- 프로젝트 ---------- */
+const SUBDIRS=["자료","분석","원고","참고문헌"];
+function projFolderName(p){ return String(p?.name||"프로젝트").replace(/[\\/:*?"<>|#^\[\]]/g," ").replace(/\s+/g," ").trim().slice(0,60)||"프로젝트"; }
+const splitKw = v => String(v||"").split(/[,，;；]/).map(x=>x.trim()).filter(Boolean);
+function projStats(p){
+  const src=S.all.filter(s=>pidOf(s)===p.id), dr=S.allDrafts.filter(d=>pidOf(d)===p.id);
+  const last=[p.updatedAt, ...src.map(s=>s.updatedAt), ...dr.map(d=>d.updatedAt)].filter(Boolean).sort().pop();
+  return {n:src.length, core:src.filter(s=>n(s.grade)>=4).length, analyzed:src.filter(s=>s.analysis).length, drafts:dr.length, chars:dr.reduce((a,d)=>a+draftLen(d),0), last};
+}
+function promptText(title, value, okLabel="저장"){
+  return new Promise(res=>{
+    const m=$("#modal");
+    m.innerHTML=`<div role="dialog" aria-modal="true"><p><b>${esc(title)}</b></p><input type="text" id="mIn" value="${esc(value)}"><div class="row" style="justify-content:flex-end"><button class="btn" id="mNo" type="button">취소</button><button class="btn primary" id="mOk" type="button">${esc(okLabel)}</button></div></div>`;
+    m.hidden=false; const inp=$("#mIn"); inp.focus(); inp.select();
+    const done=v=>{ m.hidden=true; m.innerHTML=""; res(v); };
+    $("#mNo").onclick=()=>done(null); $("#mOk").onclick=()=>done(inp.value.trim()||null);
+    inp.onkeydown=e=>{ if(e.key==="Enter") done(inp.value.trim()||null); if(e.key==="Escape") done(null); };
+    m.onclick=e=>{ if(e.target===m) done(null); };
+  });
+}
+function newIdOf(r){
+  const p=payloadOf(r);
+  const hit=findItems(p, o=>typeof (o.id||o.fileId)==="string")[0]; if(hit) return String(hit.id||hit.fileId);
+  const s=typeof p==="string"?p:JSON.stringify(p||""); const m=s.match(/"(?:id|fileId)"\s*:\s*"([^"]+)"/)||s.match(/\/d\/([\w-]{15,})/)||s.match(/id[:=]\s*([\w-]{15,})/i); return m?m[1]:null;
+}
+async function driveMkdir(name, parent){
+  try{
+    const found=await driveSearch(name);
+    const hit=found.find(f=>driveName(f)===name && /folder/i.test(String(f.mimeType||f.mime_type||"")) && (!parent || JSON.stringify(f.parents||f.parentId||f.parent||"").includes(parent)));
+    if(hit) return driveId(hit);
+  }catch(e){ if(e.code && e.code!=="tool_error") throw e; }
+  const r=await mcall(GD,"create_file",{title:name, mime:"application/vnd.google-apps.folder", parent});
+  const id=newIdOf(r); if(!id) throw {code:"tool_error"}; return id;
+}
+async function makeDriveFolders(p){
+  if(!cap.mcp){ toast("구글 드라이브 폴더는 Claude에서 Google Drive 커넥터를 연결하면 만들 수 있습니다. 대문의 프로젝트 목록에서 나중에 만들 수 있어요."); return false; }
+  jobStart("구글 드라이브에 프로젝트 폴더 만드는 중");
+  try{
+    const root=await driveMkdir("AI WIKI", null);
+    const id=await driveMkdir(projFolderName(p), root);
+    const subs={}; for(const d of SUBDIRS){ jobLabel(`드라이브 폴더 만드는 중 · ${d}`); subs[d]=await driveMkdir(d, id); }
+    const cur=S.projects.find(x=>x.id===p.id)||p;
+    cur.folders={...(cur.folders||{}), drive:{root, id, subs, at:now()}}; await Store.saveProject(cur);
+    toast(`구글 드라이브에 'AI WIKI/${projFolderName(p)}' 폴더와 하위 폴더 ${SUBDIRS.length}개를 만들었습니다.`); return true;
+  }catch(e){ toast(DRIVE_ERR[e.code]||"드라이브 폴더를 만들지 못했습니다. 대문의 프로젝트 목록에서 다시 시도할 수 있습니다.",true); return false; }
+  finally{ jobEnd(); render(); }
+}
+function projReadme(p){
+  const t=p.thesis||{};
+  return `---\ntitle: "${String(p.name).replace(/"/g,"'")}"\naiwiki_project: "${p.id}"\ncreated: ${String(p.createdAt||now()).slice(0,10)}\ntags: [AI-WIKI, 프로젝트]\n---\n# ${p.name}\n\n${p.desc||""}\n\n## 내 논문\n- 분야: ${t.field||"-"}\n- 주제: ${t.topic||"-"}\n- 키워드: ${(t.keywords||[]).join(", ")||"-"}\n\n## 폴더\n${SUBDIRS.map(d=>`- ${d}/`).join("\n")}\n\n이 폴더는 AI WIKI 프로젝트와 같은 구조입니다. AI WIKI의 'Obsidian·드라이브' 화면에서 노트를 내보내거나 이 폴더의 노트를 가져올 수 있습니다.\n`;
+}
+async function makeObsidianFolder(p){
+  try{ await needZip(); }catch(e){ toast(e.message,true); return false; }
+  const zip=new JSZip(); const root=zip.folder("AI WIKI").folder(projFolderName(p));
+  root.file("README.md", projReadme(p));
+  const guide={"자료":"수집한 자료 노트(PDF·HWPX·웹·RISS·KCI)","분석":"분석 보고서와 종합 분석","원고":"AI 집필 원고","참고문헌":"참고문헌 목록"};
+  SUBDIRS.forEach(d=>root.folder(d).file(`_${d} 안내.md`, `# ${d}\n\n${guide[d]}을 두는 폴더입니다. ([[README]])\n`));
+  const blob=await zip.generateAsync({type:"blob"});
+  await saveFile(`AI WIKI - ${projFolderName(p)} (Obsidian 폴더).zip`, blob);
+  const cur=S.projects.find(x=>x.id===p.id)||p;
+  cur.folders={...(cur.folders||{}), obsidian:{path:`AI WIKI/${projFolderName(p)}`, at:now()}}; await Store.saveProject(cur);
+  toast("Obsidian 폴더 압축 파일을 저장했습니다. 볼트 폴더에 풀면 같은 구조의 폴더가 생깁니다.");
+  return true;
+}
+async function createProject(){
+  const f=S.np; const name=f.name.trim();
+  if(!name){ toast("프로젝트 이름을 입력하세요."); $("#npName")?.focus(); return; }
+  if(S.projects.some(p=>p.name===name)){ toast("같은 이름의 프로젝트가 이미 있습니다. 다른 이름을 쓰세요."); return; }
+  const p={id:"p_"+uid(), name, desc:f.desc.trim(), thesis:{field:f.field.trim(), topic:f.topic.trim(), keywords:splitKw(f.keywords), outline:"", insight:""}, folders:{}, createdAt:now()};
+  await Store.saveProject(p); setProject(p.id);
+  const want={drive:f.drive, obs:f.obs};
+  S.np={name:"", topic:"", field:"", keywords:"", desc:"", drive:true, obs:true}; S.showNew=false;
+  toast(`'${name}' 프로젝트를 만들었습니다.`);
+  S.view="dash"; render();
+  if(want.obs) await makeObsidianFolder(p);
+  if(want.drive) await makeDriveFolders(p);
+}
+async function deleteProjectFlow(id){
+  const p=S.projects.find(x=>x.id===id); if(!p) return;
+  const st=projStats(p);
+  if(!(await ask(`'${clip(p.name,30)}' 프로젝트를 삭제할까요? 자료 ${st.n}건과 원고 ${st.drafts}건도 함께 지워집니다. 구글 드라이브와 Obsidian의 폴더는 그대로 남습니다.`,"프로젝트 삭제"))) return;
+  for(const s of S.all.filter(s=>pidOf(s)===id)){ if(s.pdfAsset&&cap.assets) cap.assets.delete(s.pdfAsset).catch(()=>{}); await Store.deleteSource(s.id); }
+  for(const d of S.allDrafts.filter(d=>pidOf(d)===id)) await Store.deleteDraft(d.id);
+  await Store.deleteProject(id); toast("프로젝트를 삭제했습니다."); S.view="home"; render();
+}
+
+/* ---------- 렌더 ---------- */
+function gb(g){ g=n(g); return `<span class="gb g${g}" title="${g?g+"등급 · "+GL[g]:"미분류"}">${g||"–"}</span>`; }
+function countBy(arr, fn){ const m=new Map(); for(const x of arr){ const ks=[].concat(fn(x)).filter(v=>v!==undefined&&v!==null&&v!==""); for(const k of ks) m.set(k,(m.get(k)||0)+1); } return [...m.entries()].sort((a,b)=>b[1]-a[1]); }
+function hbars(entries, top=8){
+  if(!entries.length) return `<p class="muted small">데이터가 없습니다.</p>`;
+  const e=entries.slice(0,top), max=Math.max(...e.map(x=>x[1]));
+  return `<div class="hbars">${e.map(([k,v])=>`<div class="hbar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="track"><span class="fill" style="width:${(v/max*100).toFixed(1)}%"></span></span><span class="v">${v}</span></div>`).join("")}</div>`;
+}
+function renderNav(){
+  const cnt={library:S.sources.length, write:S.drafts.length};
+  const btn=([k,l])=>`<button type="button" data-act="go" data-v="${k}" ${S.view===k||(k==="library"&&S.view==="detail")?'aria-current="page"':""} ${k!=="home"&&!S.pid?'aria-disabled="true"':""}><span>${l}</span>${cnt[k]!=null&&S.pid?`<span class="n">${cnt[k]}</span>`:""}</button>`;
+  const p=curProj();
+  $("#nav").innerHTML=btn(NAV[0])
+   + `<div class="projbox"><span class="lbl">프로젝트</span>${S.projects.length?`<select id="projSel" aria-label="프로젝트 선택"><option value="">프로젝트 선택…</option>${S.projects.map(x=>`<option value="${x.id}" ${x.id===S.pid?"selected":""}>${esc(clip(x.name,26))}</option>`).join("")}</select>`:`<button type="button" class="btn sm" data-act="newProj">+ 새 프로젝트</button>`}</div>`
+   + NAV.slice(1).map(btn).join("");
+}
+function flowHtml(){
+  const steps=[
+    ["프로젝트 생성","주제·키워드 입력, Obsidian·구글 드라이브에 같은 폴더 생성"],
+    ["자료 수집","PDF · HWPX · 웹 · 구글 드라이브(관련 20건) · RISS·KCI 초록 · Obsidian"],
+    ["AI 분류","주제 · 키워드 · 소스 유형 · 논문 관련도 1–5등급"],
+    ["분석","내 관점 직접 입력 → 분석 보고서 · 종합/비교 분석 · 접점·인사이트"],
+    ["정리","대시보드 차트 · 참고문헌(저자·연도·출판사, 등급·출처)"],
+    ["AI 집필","유형·심도·분량 선택 → 목차 추천 → 장·절 집필 → 수정"],
+    ["내보내기","Obsidian 볼트 · 구글 드라이브 · JSON · TXT · HTML"]
+  ];
+  return `<div class="flow" role="list">${steps.map(([t,d],i)=>`<div class="fnode" role="listitem"><span class="fno">${i+1}</span><b>${t}</b><span>${d}</span></div>`).join("")}</div>
+  <div class="floop"><span>↺</span> Obsidian이나 구글 드라이브에서 고친 노트를 다시 가져오면 같은 자료가 갱신되어 2단계부터 다시 이어집니다.</div>`;
+}
+function guideHtml(){
+  const g=[
+    ["1","프로젝트 만들기","논문 하나를 프로젝트 하나로 관리합니다. 만들 때 Obsidian용 폴더(zip)와 구글 드라이브 폴더 'AI WIKI/프로젝트명/자료·분석·원고·참고문헌'을 함께 만들 수 있습니다."],
+    ["2","내 논문 정보 입력","'내 논문'에 주제, 키워드, 개요를 적습니다. AI 분류, 등급, 분석, 집필이 모두 이 정보를 기준으로 동작합니다."],
+    ["3","자료 모으기","'자료 수집'에서 파일을 끌어다 놓거나, 구글 드라이브에서 관련 자료 20건을 고르거나, RISS·KCI 초록을 검색·붙여 넣습니다."],
+    ["4","분류 확인과 내 관점","AI가 매긴 등급을 확인하고 필요하면 직접 고칩니다. 자료마다 '내 관점'을 적고 분석 보고서를 만듭니다."],
+    ["5","참고문헌과 집필","등급 기준으로 참고문헌을 뽑고, 'AI 집필'에서 목차 추천 → 절별 집필 → AI 수정 순으로 원고를 씁니다."],
+    ["6","주고받기와 백업","'Obsidian·드라이브'에서 노트를 내보내고 가져옵니다. 앱 전체를 HTML 파일로 저장해 둘 수도 있습니다."]
+  ];
+  return `<div class="guide">${g.map(([no,t,d])=>`<div class="gcard"><span class="gno">${no}</span><h3>${t}</h3><p>${d}</p></div>`).join("")}</div>`;
+}
+function vHome(){
+  const P=[...S.projects].sort(byUpd), p=curProj(), f=S.np;
+  const showForm = S.showNew || !S.projects.length;
+  const form=`<section class="panel newproj" id="newProj"><div class="panel-head"><h2>새 프로젝트</h2>${S.projects.length?`<button class="btn sm ghost" data-act="hideNew" type="button">닫기</button>`:""}</div>
+    <div class="grid g2" style="gap:12px">
+      <label class="f">프로젝트 이름 <span class="req">필수</span><input type="text" id="npName" data-np="name" value="${esc(f.name)}" placeholder="예: 신흥 指人 类词缀 연구"></label>
+      <label class="f">연구 분야<input type="text" data-np="field" value="${esc(f.field)}" placeholder="예: 중국어학"></label>
+      <label class="f">논문 주제<input type="text" data-np="topic" value="${esc(f.topic)}" placeholder="나중에 '내 논문'에서 입력해도 됩니다"></label>
+      <label class="f">키워드 (쉼표로 구분)<input type="text" data-np="keywords" value="${esc(f.keywords)}"></label>
+    </div>
+    <label class="f" style="margin-top:12px">메모<input type="text" data-np="desc" value="${esc(f.desc)}" placeholder="학기, 지도교수, 제출 일정 등"></label>
+    <div class="folderopt">
+      <label class="check"><input type="checkbox" data-np="obs" ${f.obs?"checked":""}> Obsidian 폴더 만들기 <span class="muted small">— 'AI WIKI/${esc(projFolderName({name:f.name||"프로젝트명"}))}' 구조의 zip을 저장합니다. 볼트에 풀어 주세요.</span></label>
+      <label class="check"><input type="checkbox" data-np="drive" ${f.drive?"checked":""}> 구글 드라이브에 같은 폴더 만들기 <span class="muted small">— ${cap.mcp?"Google Drive 커넥터가 연결되어 있어야 합니다.":"이 화면에서는 쓸 수 없어 나중에 만들 수 있습니다."}</span></label>
+      <div class="tree"><span>AI WIKI/</span><span>└ ${esc(projFolderName({name:f.name||"프로젝트명"}))}/</span>${SUBDIRS.map((d,i)=>`<span>   ${i===SUBDIRS.length-1?"└":"├"} ${d}/</span>`).join("")}</div>
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn primary" data-act="createProj" type="button">프로젝트 만들기</button></div>
+  </section>`;
+  const table = P.length ? `<div class="tablewrap"><table class="ptable"><thead><tr><th>프로젝트</th><th class="num">자료</th><th class="num">핵심</th><th class="num">원고</th><th>폴더</th><th>생성일</th><th>최근 작업</th><th><span class="sr">동작</span></th></tr></thead><tbody>${P.map(x=>{ const st=projStats(x); const fd=x.folders||{}; return `<tr class="${x.id===S.pid?"on":""}">
+      <td><button class="plink" data-act="openProj" data-v="${x.id}" type="button">${esc(x.name)}</button>${x.id===S.pid?' <span class="chip k">작업 중</span>':""}<div class="small muted">${esc(clip(x.thesis?.topic||x.desc||"주제 미입력",60))}</div></td>
+      <td class="num">${st.n}</td><td class="num">${st.core}</td><td class="num">${st.drafts}${st.chars?`<div class="small muted">${st.chars.toLocaleString()}자</div>`:""}</td>
+      <td><div class="fchips"><span class="fchip ${fd.obsidian?"ok":""}" title="${fd.obsidian?"Obsidian 폴더 생성됨":"Obsidian 폴더 없음"}">Obsidian ${fd.obsidian?"✓":`<button class="linkbtn" data-act="mkObs" data-v="${x.id}" type="button">만들기</button>`}</span><span class="fchip ${fd.drive?"ok":""}" title="${fd.drive?"구글 드라이브 폴더 생성됨":"드라이브 폴더 없음"}">드라이브 ${fd.drive?"✓":`<button class="linkbtn" data-act="mkDrive" data-v="${x.id}" type="button" ${cap.mcp?"":"disabled"}>만들기</button>`}</span></div></td>
+      <td class="cnt">${fmtDate(x.createdAt)}</td><td class="cnt">${st.last?fmtDate(st.last):"-"}</td>
+      <td><div class="row" style="flex-wrap:nowrap;gap:4px"><button class="btn sm primary" data-act="openProj" data-v="${x.id}" type="button">열기</button><button class="btn sm ghost" data-act="renameProj" data-v="${x.id}" type="button">이름 변경</button><button class="btn sm ghost danger" data-act="delProj" data-v="${x.id}" type="button">삭제</button></div></td></tr>`; }).join("")}</tbody></table></div>` : "";
+  return `<section class="hero">
+      <div class="hero-txt"><p class="eyebrow">연구 위키</p><h1 class="htitle">AI WIKI</h1>
+        <p class="lead">Obsidian 노트, 구글 드라이브, PDF·HWPX·웹, RISS·KCI 초록을 한곳에 모아 AI로 분류하고, 내 관점으로 분석해 논문과 강의노트를 씁니다.</p>
+        <div class="row" style="margin-top:16px">${p?`<button class="btn primary lg" data-act="go" data-v="dash" type="button">'${esc(clip(p.name,20))}' 이어서 작업</button>`:""}<button class="btn ${p?"":"primary"} lg" data-act="newProj" type="button">+ 새 프로젝트</button><a class="btn ghost lg" href="#guide">사용법 보기</a></div></div>
+      <div class="hero-stats"><div><b>${S.projects.length}</b><span>프로젝트</span></div><div><b>${S.all.length}</b><span>전체 자료</span></div><div><b>${S.all.filter(s=>n(s.grade)>=4).length}</b><span>핵심·주요 자료</span></div><div><b>${S.allDrafts.reduce((a,d)=>a+draftLen(d),0).toLocaleString()}</b><span>원고 글자 수</span></div></div>
+    </section>
+    ${showForm?form:""}
+    <section class="panel" style="margin-top:16px"><div class="panel-head"><h2>프로젝트 히스토리</h2><span class="muted small">${P.length?`${P.length}개 · 최근 작업 순`:""}</span></div>
+      ${table||`<div class="empty"><b>아직 프로젝트가 없습니다</b>위의 '새 프로젝트'에서 첫 프로젝트를 만들어 보세요.</div>`}</section>
+    <section class="panel" style="margin-top:16px" id="flow"><div class="panel-head"><h2>동작 흐름도</h2><span class="muted small">한 프로젝트 안에서 자료가 움직이는 순서</span></div>${flowHtml()}</section>
+    <section style="margin-top:22px" id="guide"><h2 style="margin-bottom:12px">사용법</h2>${guideHtml()}
+      <p class="note" style="margin-top:14px">AI 기능(분류, 분석, 집필)은 Claude 앱이나 claude.ai에서 이 페이지를 열 때 동작하며 처음 쓸 때 허용 창이 뜹니다. 구글 드라이브는 claude.ai 설정 → 커넥터에서 Google Drive를 연결해야 쓸 수 있고, RISS·KCI·웹 자동 수집은 데스크톱 앱의 Firecrawl 도구가 필요합니다. 연결이 없어도 파일 올리기와 붙여 넣기로 모든 단계를 진행할 수 있습니다.</p></section>`;
+}
+function nextSteps(){
+  const t=S.thesis, L=S.sources;
+  const items=[
+    [!!t.topic, "내 논문 주제·키워드 입력", "thesis"],
+    [L.length>=5, `자료 5건 이상 수집 (현재 ${L.length}건)`, "collect"],
+    [L.length>0 && !L.some(s=>!n(s.grade)), "모든 자료 AI 분류", "library"],
+    [L.some(s=>s.myView), "자료에 내 관점 입력", "library"],
+    [L.some(s=>s.analysis), "분석 보고서 1건 이상 작성", "library"],
+    [S.drafts.some(d=>draftLen(d)>0), "원고 집필 시작", "write"]
+  ];
+  const done=items.filter(x=>x[0]).length;
+  return `<section class="panel steps"><div class="panel-head"><h2>다음 할 일</h2><span class="cnt">${done}/${items.length} 완료</span></div><div class="meter" style="margin-bottom:12px"><i style="width:${(done/items.length*100).toFixed(0)}%"></i></div>
+    <ol class="todo">${items.map(([ok,l,v])=>`<li class="${ok?"ok":""}"><span class="tick">${ok?"✓":""}</span><span>${l}</span>${ok?"":`<button class="btn sm" data-act="go" data-v="${v}" type="button">하러 가기</button>`}</li>`).join("")}</ol></section>`;
+}
+function head(eyebrow, title, sub, actions=""){ return `<header class="page-head"><div><p class="eyebrow">${eyebrow}</p><h1>${title}</h1>${sub?`<p class="muted" style="margin-top:6px">${sub}</p>`:""}</div>${actions?`<div class="row">${actions}</div>`:""}</header>`; }
+const exBadge = s => s.isExample?` <span class="chip ex">예시</span>`:"";
+
+function vDash(){
+  const L=S.sources, t=S.thesis;
+  const gcount=[1,2,3,4,5].map(g=>L.filter(s=>n(s.grade)===g).length), gmax=Math.max(1,...gcount);
+  const kw=countBy(L,s=>s.keywords||[]).slice(0,24), kmax=kw[0]?.[1]||1;
+  const analyzed=L.filter(s=>s.analysis).length, core=L.filter(s=>n(s.grade)>=4).length, uncl=L.filter(s=>!n(s.grade)).length;
+  const words=S.drafts.reduce((a,d)=>a+draftLen(d),0);
+  const exN=L.filter(s=>s.isExample).length;
+  return head(`대시보드 · ${esc(curProj()?.name||"")}`, esc(t.topic||"내 논문 주제를 먼저 입력하세요"),
+    (t.keywords||[]).length?(t.keywords||[]).map(k=>`<span class="chip k">${esc(k)}</span>`).join(" "):`<button class="btn sm" data-act="go" data-v="thesis" type="button">내 논문 정보 입력</button>`,
+    `<button class="btn" data-act="go" data-v="collect" type="button">자료 수집</button><button class="btn primary" data-act="go" data-v="write" type="button">AI 집필</button>`)
+  + (exN?`<p class="note" style="margin-bottom:14px">노란 <b>예시</b> 표시가 있는 ${exN}건은 기능을 보여 주기 위한 예시 자료입니다. 실제 문헌이 아니므로 인용하지 마세요. <button class="btn sm" data-act="delExamples" type="button">예시 자료 모두 삭제</button></p>`:"")
+  + `<div class="kpis">
+      <div class="kpi"><b>${L.length}</b><span>전체 자료</span></div>
+      <div class="kpi"><b>${core}</b><span>핵심·주요 자료 (4–5등급)</span></div>
+      <div class="kpi"><b>${analyzed}</b><span>분석 보고서 작성</span></div>
+      <div class="kpi"><b>${uncl}</b><span>미분류 자료</span></div>
+      <div class="kpi"><b>${words.toLocaleString()}</b><span>원고 누적 글자 수</span></div>
+    </div>` + nextSteps()
+  + (L.length? `<div class="grid g2">
+      <section class="panel"><div class="panel-head"><h2>논문 관련도 등급</h2>${uncl?`<button class="btn sm" data-act="classifyUncl" type="button">미분류 ${uncl}건 AI 분류</button>`:""}</div>
+        <div class="cols">${gcount.map((c,i)=>`<div class="col"><span class="v">${c}</span><span class="bar" style="height:${(c/gmax*100).toFixed(1)}%;background:var(--g${i+1})"></span></div>`).join("")}</div>
+        <div class="collab">${[1,2,3,4,5].map(g=>`<span>${g} ${GL[g]}</span>`).join("")}</div></section>
+      <section class="panel"><h2>주제 분류</h2>${hbars(countBy(L,s=>s.topic||"미분류"))}</section>
+      <section class="panel"><h2>수집 경로</h2>${hbars(countBy(L,s=>CH[s.ch]||s.ch))}</section>
+      <section class="panel"><h2>문서 종류</h2>${hbars(countBy(L,s=>s.kind||"미분류"))}</section>
+      <section class="panel"><h2>키워드</h2><div class="cloud">${kw.length?kw.map(([k,v])=>`<span data-act="kw" data-v="${esc(k)}" style="font-size:${(0.8+0.7*v/kmax).toFixed(2)}rem;opacity:${(0.55+0.45*v/kmax).toFixed(2)}" title="${v}건">${esc(k)}</span>`).join(""):`<p class="muted small">분류된 키워드가 없습니다.</p>`}</div></section>
+      <section class="panel"><h2>최근 추가한 자료</h2><div class="list">${L.slice(0,6).map(s=>`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line);flex-wrap:nowrap">${gb(s.grade)}<span class="t" style="cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-act="open" data-v="${s.id}">${esc(s.title)}</span><span class="muted small" style="margin-left:auto;white-space:nowrap">${CH[s.ch]}</span></div>`).join("")}</div></section>
+    </div>` : `<div class="panel empty"><b>아직 수집한 자료가 없습니다</b>PDF, HWPX, 웹 페이지를 수집하거나 Obsidian 노트를 가져오면 여기에 분류 결과가 차트로 나타납니다.<div class="row" style="justify-content:center;margin-top:14px"><button class="btn primary" data-act="go" data-v="collect" type="button">자료 수집 시작</button><button class="btn" data-act="go" data-v="exchange" type="button">Obsidian에서 가져오기</button></div></div>`);
+}
+
+function vCollect(){
+  const tabs=[["pdf","PDF"],["hwpx","HWPX"],["web","웹"],["drive","구글 드라이브"],["acad","RISS · KCI 초록"],["manual","직접 입력"]];
+  let body="";
+  if(S.tab==="pdf"||S.tab==="hwpx"){
+    const isPdf=S.tab==="pdf";
+    body=`<div class="drop" id="drop" data-act="pick" data-v="${isPdf?".pdf":".hwpx,.hwp"}" tabindex="0" role="button"><b>${isPdf?"PDF 파일을 끌어다 놓거나 눌러서 선택":"HWPX 파일을 끌어다 놓거나 눌러서 선택"}</b><span class="muted small">여러 파일을 한 번에 올릴 수 있습니다. 본문은 자료당 최대 ${TEXT_LIMIT.toLocaleString()}자까지 저장합니다.${isPdf?" 스캔 이미지 PDF는 글자를 읽지 못합니다.":" 구버전 HWP는 한글에서 HWPX로 저장한 뒤 올려 주세요."}</span></div>
+    <div class="row" style="margin-top:12px;gap:18px">
+      <label class="check"><input type="checkbox" id="optAuto" checked> 올린 뒤 AI로 주제·키워드·등급 자동 분류</label>
+      ${isPdf?`<label class="check"><input type="checkbox" id="optKeep" ${cap.assets?"":"disabled"}> 원문 PDF 보관(나중에 다운로드)</label>${cap.assets?"":`<span class="muted small">원문 보관은 이 화면에서 쓸 수 없습니다.</span>`}`:""}
+    </div>`;
+  } else if(S.tab==="web"){
+    body=`<div class="stack">
+      <label class="f">웹 페이지 또는 온라인 PDF 주소<div class="row" style="flex-wrap:nowrap"><input type="url" id="webUrl" placeholder="https://"><button class="btn primary" data-act="scrape" type="button">가져오기</button></div></label>
+      <p class="note">자동 수집은 Claude 데스크톱 앱에서 Firecrawl 도구가 연결되어 있을 때 동작합니다. 쓸 수 없으면 아래에 제목과 본문을 붙여 넣어 저장하세요.</p>
+      <div class="grid g2"><label class="f">제목<input type="text" id="webTitle"></label><label class="f">사이트·기관명<input type="text" id="webPub"></label></div>
+      <label class="f">본문<textarea id="webText" rows="10" placeholder="페이지 본문을 붙여 넣으세요"></textarea></label>
+      <div class="row"><label class="check"><input type="checkbox" id="optAuto" checked> 저장 후 AI 자동 분류</label><button class="btn" data-act="saveWeb" type="button" style="margin-left:auto">웹 자료로 저장</button></div>
+    </div>`;
+  } else if(S.tab==="drive"){
+    const D=S.drive;
+    body=`<div class="stack">
+      <p class="small muted">'내 논문'의 주제와 키워드로 구글 드라이브를 검색한 뒤, AI가 논문과 관련된 자료 20건을 골라 줍니다. 고른 파일만 가져옵니다.</p>
+      <div class="row" style="flex-wrap:nowrap"><input type="search" id="driveQ" value="${esc(D.q)}" placeholder="비워 두면 논문 주제·키워드로 검색 (쉼표로 여러 개)"><button class="btn primary" data-act="driveFind" type="button" ${D.busy?"disabled":""}>관련 자료 20건 찾기</button></div>
+      ${D.note?`<p class="note">${esc(D.note)}</p>`:""}
+      ${D.items.length?`<div class="row"><b>${D.picked.size}건 선택</b><button class="btn sm" data-act="drivePickTop" type="button">상위 20건 선택</button><button class="btn sm" data-act="drivePickNone" type="button">선택 해제</button><button class="btn sm primary" data-act="driveImport" type="button" style="margin-left:auto" ${D.busy||!D.picked.size?"disabled":""}>선택한 ${D.picked.size}건 가져오기</button></div>
+      <div class="pickl" style="max-height:460px">${D.items.map((f,i)=>`<label><input type="checkbox" data-act="drivePick" data-v="${esc(f.id)}" ${D.picked.has(f.id)?"checked":""} ${f.have?"disabled":""}>${f.score?`<span class="gb g${Math.min(5,Math.max(1,f.score))}">${f.score}</span>`:`<span class="gb g0">–</span>`}<span style="min-width:0"><b>${esc(f.name)}</b>${f.have?' <span class="chip">이미 가져옴</span>':""}<br><span class="muted small">${esc(f.reason||("검색어: "+f.hit))}</span></span></label>`).join("")}</div>`:""}
+      ${cap.mcp?"":`<p class="note">이 화면에서는 구글 드라이브를 쓸 수 없습니다. Claude 앱이나 claude.ai에서 열고, 설정 → 커넥터에서 Google Drive를 연결하세요.</p>`}
+    </div>`;
+  } else if(S.tab==="acad"){
+    const A=S.acad;
+    body=`<div class="stack">
+      <div class="row"><div class="seg" role="group">${Object.entries(ACAD).map(([k,v])=>`<button type="button" aria-pressed="${A.site===k}" data-act="acadSite" data-v="${k}">${v.label}</button>`).join("")}</div><span class="small muted">${A.site==="kci"?"한국학술지인용색인(kci.go.kr)":"학술연구정보서비스(riss.kr)"}의 논문 초록을 서지 정보와 함께 저장합니다.</span></div>
+      <div class="row" style="flex-wrap:nowrap"><input type="search" id="acadQ" value="${esc(A.q)}" placeholder="비워 두면 논문 주제·키워드로 검색"><button class="btn primary" data-act="acadSearch" type="button" ${A.busy?"disabled":""}>검색</button></div>
+      ${A.note?`<p class="note">${esc(A.note)}</p>`:""}
+      ${A.items.length?`<div class="list">${A.items.map(it=>`<div class="item" style="grid-template-columns:minmax(0,1fr) auto"><div style="min-width:0"><a class="t" href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a><div class="meta">${esc(clip(it.desc,220))}</div></div><div class="acts">${it.have?'<span class="chip">저장됨</span>':`<button class="btn sm" data-act="acadFetch" data-v="${esc(it.url)}" type="button" ${job?"disabled":""}>초록 가져오기</button>`}</div></div>`).join("")}</div>`:""}
+      <details ${A.items.length?"":"open"}><summary>초록 직접 붙여 넣기</summary>
+        <p class="small muted" style="margin:8px 0">${ACAD[A.site].label} 검색 결과나 논문 상세 화면, 내보내기(텍스트) 내용을 그대로 붙여 넣으면 AI가 논문별로 제목, 저자, 발행연도, 학술지(출판사), 초록을 나눠 저장합니다. 여러 편을 한 번에 넣어도 됩니다.</p>
+        <textarea id="acadPaste" rows="8" placeholder="여기에 붙여 넣기"></textarea>
+        <div class="row" style="margin-top:8px"><button class="btn primary" data-act="acadPaste" type="button" style="margin-left:auto" ${job?"disabled":""}>정리해서 저장</button></div>
+      </details>
+      ${cap.mcp?"":`<p class="note">자동 검색은 Claude 데스크톱 앱에서 Firecrawl 도구가 연결되어 있을 때 동작합니다. 지금은 붙여 넣기로 저장하세요.</p>`}
+    </div>`;
+  } else {
+    body=`<div class="stack">
+      <div class="grid g3"><label class="f">제목<input type="text" id="mTitle"></label><label class="f">저자<input type="text" id="mAuthor"></label><label class="f">연도<input type="text" id="mYear"></label></div>
+      <label class="f">내용 (메모, 발췌, 아이디어)<textarea id="mText" rows="10"></textarea></label>
+      <div class="row"><label class="check"><input type="checkbox" id="optAuto" checked> 저장 후 AI 자동 분류</label><button class="btn primary" data-act="saveManual" type="button" style="margin-left:auto">저장</button></div>
+    </div>`;
+  }
+  return head("자료 수집","자료 수집","PDF·HWPX 문서, 웹 페이지, 구글 드라이브 파일, RISS·KCI 논문 초록을 위키에 모읍니다. 수집한 자료는 AI가 주제, 키워드, 문서 종류, 논문 관련도 등급(1–5)으로 분류합니다.")
+   + `<section class="panel"><div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" type="button" aria-selected="${S.tab===k}" data-act="tab" data-v="${k}">${l}</button>`).join("")}</div>${body}<div class="queue" id="queue"></div></section>`;
+}
+function renderQueue(){ const el=$("#queue"); if(!el) return; el.innerHTML=S.queue.slice(0,12).map(q=>`<div><span>${esc(q.name)}${q.note?` <span class="muted small">— ${esc(q.note)}</span>`:""}</span><span>${q.id?`<button class="btn sm ghost" data-act="open" data-v="${q.id}" type="button">${esc(q.st)} · 열기</button>`:esc(q.st)}</span></div>`).join(""); }
+
+function filtered(){
+  const f=S.f, q=f.q.trim().toLowerCase();
+  let L=S.sources.filter(s=>(!f.topic||s.topic===f.topic)&&(!f.ch||s.ch===f.ch)&&(!f.kind||s.kind===f.kind)&&(f.grade===""||String(n(s.grade))===f.grade));
+  if(q) L=L.filter(s=>[s.title,s.author,s.topic,s.summary,(s.keywords||[]).join(" "),s.myView].join(" ").toLowerCase().includes(q));
+  const so=f.sort;
+  if(so==="grade") L=[...L].sort((a,b)=>n(b.grade)-n(a.grade));
+  else if(so==="title") L=[...L].sort((a,b)=>String(a.title).localeCompare(String(b.title),"ko"));
+  return L;
+}
+function vLibrary(){
+  const L=filtered(), topics=[...new Set(S.sources.map(s=>s.topic).filter(Boolean))].sort(), f=S.f;
+  const opt=(v,l,cur)=>`<option value="${esc(v)}" ${cur===v?"selected":""}>${esc(l)}</option>`;
+  const selN=[...S.sel].filter(id=>S.sources.some(s=>s.id===id)).length;
+  return head("자료 라이브러리", "자료 라이브러리", `${S.sources.length}건 중 ${L.length}건 표시`, `<button class="btn" data-act="go" data-v="collect" type="button">자료 추가</button>`)
+  + `<div class="filters">
+      <input type="search" id="fq" placeholder="제목, 저자, 키워드, 요약 검색" value="${esc(f.q)}">
+      <select id="ftopic">${opt("","모든 주제",f.topic)}${topics.map(t=>opt(t,t,f.topic)).join("")}</select>
+      <select id="fch">${opt("","모든 수집 경로",f.ch)}${Object.entries(CH).map(([k,l])=>opt(k,l,f.ch)).join("")}</select>
+      <select id="fgrade">${opt("","모든 등급",f.grade)}${[5,4,3,2,1,0].map(g=>opt(String(g),g?`${g}등급 · ${GL[g]}`:"미분류",f.grade)).join("")}</select>
+      <select id="fsort">${opt("new","최근 추가순",f.sort)}${opt("grade","관련도 높은순",f.sort)}${opt("title","제목순",f.sort)}</select>
+    </div>`
+  + (selN?`<div class="bulk"><b>${selN}건 선택</b><button class="btn sm" data-act="bulkClassify" type="button">AI 분류</button><button class="btn sm" data-act="bulkSyn" type="button">종합 분석으로</button><button class="btn sm" data-act="bulkExport" type="button">내보내기로</button><button class="btn sm" data-act="bulkDel" type="button">삭제</button><button class="btn sm" data-act="selNone" type="button" style="margin-left:auto">선택 해제</button></div>`:"")
+  + `<section class="panel" style="padding:6px 16px">${L.length?`<div class="row small muted" style="padding:8px 4px;border-bottom:1px solid var(--line)"><label class="check"><input type="checkbox" data-act="selAll" ${L.every(s=>S.sel.has(s.id))?"checked":""}> 전체 선택</label></div><div class="list">${L.map(s=>`
+      <div class="item">
+        <input type="checkbox" class="check" style="margin-top:5px;accent-color:var(--accent)" data-act="sel" data-v="${s.id}" ${S.sel.has(s.id)?"checked":""} aria-label="선택">
+        ${gb(s.grade)}
+        <div style="min-width:0"><div class="t" data-act="open" data-v="${s.id}">${esc(s.title)}${exBadge(s)}</div>
+          <div class="meta">${CH[s.ch]||s.ch}${s.kind?" · "+esc(s.kind):""}${s.author?" · "+esc(s.author):""}${s.year?" ("+esc(s.year)+")":""}${s.topic?" · <b>"+esc(s.topic)+"</b>":""}${s.analysis?" · 분석 완료":""}${s.myView?" · 내 관점":""}</div>
+          ${(s.keywords||[]).length?`<div class="kw">${s.keywords.slice(0,7).map(k=>`<span class="chip">${esc(k)}</span>`).join("")}</div>`:""}
+        </div>
+        <div class="acts row"><button class="btn sm ghost" data-act="open" data-v="${s.id}" type="button">열기</button></div>
+      </div>`).join("")}</div>`:`<div class="empty"><b>조건에 맞는 자료가 없습니다</b>검색어나 필터를 바꾸거나 새 자료를 수집하세요.</div>`}</section>`;
+}
+
+function vDetail(){
+  const s=S.sources.find(x=>x.id===S.srcId);
+  if(!s) return head("자료","자료를 찾을 수 없습니다","삭제되었을 수 있습니다.",`<button class="btn" data-act="go" data-v="library" type="button">라이브러리로</button>`);
+  const live=S.live["an:"+s.id];
+  const an = live!==undefined ? live : s.analysis;
+  return `<p style="margin-bottom:10px"><button class="btn sm ghost" data-act="go" data-v="library" type="button">← 자료 라이브러리</button></p>`
+  + head(`${CH[s.ch]||s.ch}${s.kind?" · "+esc(s.kind):""}`, esc(s.title)+exBadge(s), esc(fmtRef(s,"apa")),
+     `<button class="btn" data-act="classifyOne" data-v="${s.id}" type="button">AI 재분류</button>${s.pdfAsset&&cap.assets?`<button class="btn" data-act="dlPdf" data-v="${s.id}" type="button">원문 PDF 다운로드</button>`:""}<button class="btn danger" data-act="delOne" data-v="${s.id}" type="button">삭제</button>`)
+  + `<div class="split">
+    <div class="stack" style="min-width:0">
+      <section class="panel"><h2>요약</h2>${s.summary?`<div class="prose">${md(s.summary)}</div>`:`<p class="muted">아직 요약이 없습니다. AI 재분류를 누르면 요약과 등급이 채워집니다.</p>`}
+        ${s.touch?`<h3 style="margin-top:14px">내 논문과의 접점</h3><div class="prose">${md(s.touch)}</div>`:""}</section>
+      <section class="panel"><div class="panel-head"><h2>내 관점</h2><span class="muted small" id="mvState">${s.myView?"저장됨":""}</span></div>
+        <textarea id="myView" data-id="${s.id}" rows="5" placeholder="이 자료를 어떻게 읽었는지, 동의·반대하는 지점, 내 논문에서 어떻게 쓸지 적어 두세요. 분석 보고서는 이 관점을 반영해 작성됩니다.">${esc(s.myView||"")}</textarea></section>
+      <section class="panel"><div class="panel-head"><h2>분석 보고서</h2><div class="row">${s.analysis?`<button class="btn sm" data-act="copyAn" data-v="${s.id}" type="button">복사</button>`:""}<button class="btn sm primary" data-act="analyze" data-v="${s.id}" type="button" ${live!==undefined?"disabled":""}>${s.analysis?"다시 작성":"AI 분석 보고서 작성"}</button></div></div>
+        <div class="prose" id="anOut">${an?md(an):(live!==undefined?`<p class="muted">생각하는 중…</p>`:`<p class="muted">내 논문 정보와 내 관점을 바탕으로 핵심 요약, 주장과 근거, 연구 방법, 관점 대조, 논문 접점, 인사이트, 한계를 정리합니다.</p>`)}</div></section>
+      <section class="panel"><details><summary>원문 텍스트 (${len(s.text).toLocaleString()}자${s.cut?` · 원본 ${s.cut.toLocaleString()}자 중 일부`:""})</summary><div class="raw" style="margin-top:10px">${esc(s.text||"(본문 없음)")}</div></details></section>
+    </div>
+    <aside class="stack">
+      <section class="panel"><div class="panel-head"><h3>관련도 등급</h3>${gb(s.grade)}</div>
+        <div class="seg" role="group" aria-label="등급 지정">${[1,2,3,4,5].map(g=>`<button type="button" aria-pressed="${n(s.grade)===g}" data-act="setGrade" data-v="${g}">${g}</button>`).join("")}</div>
+        <p class="small muted" style="margin-top:8px">${n(s.grade)?`${GL[n(s.grade)]} · ${s.gradeBy==="user"?"직접 지정":"AI 분류"}`:"미분류"}${s.gradeReason?`<br>${esc(s.gradeReason)}`:""}</p></section>
+      <section class="panel"><h3>서지 정보</h3><div class="kv" id="metaForm" data-id="${s.id}">
+        <span>제목</span><input type="text" data-k="title" value="${esc(s.title)}">
+        <span>저자</span><input type="text" data-k="author" value="${esc(s.author)}">
+        <span>연도</span><input type="text" data-k="year" value="${esc(s.year)}">
+        <span>발행처</span><input type="text" data-k="publisher" value="${esc(s.publisher)}">
+        <span>URL</span><input type="text" data-k="url" value="${esc(s.url)}">
+        <span>주제</span><input type="text" data-k="topic" value="${esc(s.topic)}">
+        <span>종류</span><select data-k="kind"><option value="">-</option>${KINDS.map(k=>`<option ${s.kind===k?"selected":""}>${k}</option>`).join("")}</select>
+        <span>키워드</span><input type="text" data-k="keywords" value="${esc((s.keywords||[]).join(", "))}">
+      </div><p class="small muted" style="margin-top:8px">고친 내용은 자동 저장됩니다. 키워드는 쉼표로 구분합니다.</p></section>
+      <section class="panel small"><div class="kv"><span>수집</span><span>${esc(srcAttr(s))}</span><span>추가일</span><span>${fmtDate(s.createdAt)}</span>${s.pages?`<span>쪽수</span><span>${s.pages}쪽</span>`:""}</div></section>
+    </aside></div>`;
+}
+
+function vAnalysis(){
+  const L=[...S.sources].sort((a,b)=>n(b.grade)-n(a.grade));
+  const live=S.live.syn, last=S.syn.last;
+  const out = live!==undefined ? live : (last?last.text:"");
+  return head("종합 분석","종합 분석 보고서","여러 자료와 내 관점을 함께 놓고 종합·비교 분석하거나 연구 공백을 찾습니다. 결과는 'AI 생성' 자료로 위키에 저장할 수 있습니다.")
+  + `<div class="split"><div class="stack" style="min-width:0">
+      <section class="panel"><div class="panel-head"><h2>보고서 유형</h2></div>
+        <div class="seg" role="group">${["종합 분석 보고서","비교 분석","연구 공백 도출"].map(t=>`<button type="button" aria-pressed="${S.syn.type===t}" data-act="synType" data-v="${t}">${t}</button>`).join("")}</div>
+        <label class="f" style="margin-top:14px">내 관점 (직접 입력)<textarea id="synView" rows="5" placeholder="이 자료들을 어떤 시각으로 보고 있는지, 확인하고 싶은 가설이나 질문을 적으세요.">${esc(S.syn.view)}</textarea></label>
+        <div class="row" style="margin-top:12px"><button class="btn primary" data-act="synth" type="button" ${live!==undefined?"disabled":""}>보고서 작성 (${S.syn.ids.size}건)</button>${last&&live===undefined?`<button class="btn" data-act="synSave" type="button">위키에 저장</button><button class="btn" data-act="synCopy" type="button">복사</button>`:""}</div></section>
+      <section class="panel"><h2>결과</h2><div class="prose" id="synOut">${out?md(out):(live!==undefined?`<p class="muted">생각하는 중… 자료가 많으면 1–2분 걸립니다.</p>`:`<p class="muted">오른쪽에서 자료를 고른 뒤 보고서를 작성하세요.</p>`)}</div></section>
+    </div>
+    <aside class="panel"><div class="panel-head"><h3>분석할 자료</h3><div class="row"><button class="btn sm" data-act="synPick" data-v="4" type="button">4등급↑</button><button class="btn sm" data-act="synPick" data-v="0" type="button">해제</button></div></div>
+      ${L.length?`<div class="pickl">${L.map(s=>`<label><input type="checkbox" data-act="synSel" data-v="${s.id}" ${S.syn.ids.has(s.id)?"checked":""}>${gb(s.grade)}<span style="min-width:0">${esc(clip(s.title,60))}${s.ch==="ai"?' <span class="chip">AI 생성</span>':""}</span></label>`).join("")}</div>`:`<p class="muted small">수집된 자료가 없습니다.</p>`}
+    </aside></div>`;
+}
+
+function vThesis(){
+  const t=S.thesis, live=S.live.ins, out=live!==undefined?live:t.insight;
+  const linked=S.sources.filter(s=>n(s.grade)>=3).sort((a,b)=>n(b.grade)-n(a.grade));
+  return head("내 논문","내 논문", "주제, 키워드, 개요를 입력하면 자료 분류, 등급, 분석, 집필이 모두 이 정보를 기준으로 동작합니다.")
+  + `<div class="grid g2">
+    <section class="panel stack" id="thesisForm">
+      <div class="grid g2" style="gap:10px"><label class="f">연구 분야<input type="text" data-k="field" value="${esc(t.field)}" placeholder="예: 교육공학"></label><label class="f">키워드 (쉼표·세미콜론으로 구분)<input type="text" data-k="keywords" value="${esc((t.keywords||[]).join(", "))}"></label></div>
+      <label class="f">논문 주제<input type="text" data-k="topic" value="${esc(t.topic)}" placeholder="예: 생성형 AI가 대학 글쓰기 교육에 미치는 영향"></label>
+      <label class="f">개요 (연구 목적, 연구 질문, 장 구성)<textarea data-k="outline" rows="10">${esc(t.outline)}</textarea></label>
+      <div class="row"><span class="muted small" id="thState">입력하면 자동 저장됩니다.</span><button class="btn" style="margin-left:auto" data-act="regradeAll" type="button">전체 자료 등급 다시 매기기</button></div>
+    </section>
+    <section class="panel"><div class="panel-head"><h2>내 논문과의 접점</h2><span class="muted small">3등급 이상 ${linked.length}건</span></div>
+      ${linked.length?`<div class="list">${linked.slice(0,12).map(s=>`<div style="padding:8px 0;border-bottom:1px solid var(--line)"><div class="row" style="flex-wrap:nowrap">${gb(s.grade)}<span class="t" style="cursor:pointer;font-weight:600" data-act="open" data-v="${s.id}">${esc(clip(s.title,70))}</span></div>${s.touch?`<p class="small muted" style="margin-top:4px">${esc(clip(s.touch,220))}</p>`:""}</div>`).join("")}</div>`:`<p class="muted small">AI 분류를 마친 3등급 이상 자료가 여기에 접점과 함께 표시됩니다.</p>`}
+    </section></div>
+    <section class="panel" style="margin-top:16px"><div class="panel-head"><h2>접점·인사이트 진단</h2><div class="row">${t.insightAt?`<span class="muted small">${fmtDate(t.insightAt)} 작성</span>`:""}<button class="btn primary" data-act="insight" type="button" ${live!==undefined?"disabled":""}>${t.insight?"다시 진단":"AI 진단"}</button></div></div>
+      <div class="prose" id="insOut">${out?md(out):(live!==undefined?`<p class="muted">생각하는 중…</p>`:`<p class="muted">논문 개요와 수집 자료를 대조해 근거가 충분한 논점, 약한 논점, 장·절별 자료 배치, 새 인사이트, 추가 수집 검색어를 정리합니다.</p>`)}</div>
+      ${t.insightRefs&&live===undefined?`<details style="margin-top:10px"><summary class="small">자료 번호표</summary><pre class="raw">${esc(t.insightRefs)}</pre></details>`:""}</section>`;
+}
+
+function vRefs(){
+  const o=S.refOpt, L=refList();
+  const styles=[["apa","APA 7"],["kci","한국식(KCI)"],["chicago","Chicago"],["mla","MLA"]];
+  const one=s=>`<li>${esc(fmtRef(s,o.style))} ${gb(s.grade)}${o.attr?`<div class="src">출처: ${esc(srcAttr(s))}</div>`:""}</li>`;
+  let list="";
+  if(o.group){ for(const g of [5,4,3,2,1]){ const a=L.filter(s=>n(s.grade)===g); if(a.length) list+=`<h3 style="margin:14px 0 6px">${g}등급 · ${GL[g]} <span class="muted small">${a.length}건</span></h3><ol class="refs">${a.map(one).join("")}</ol>`; } }
+  else list=`<ol class="refs">${[...L].sort((x,y)=>authorsKR(x.author).localeCompare(authorsKR(y.author),"ko")).map(one).join("")}</ol>`;
+  if(o.mode==="table") list=`<div style="overflow-x:auto"><table class="btable"><thead><tr><th>#</th><th>저자</th><th>출판연도</th><th>제목</th><th>출판사·학술지</th><th>등급</th><th>출처</th></tr></thead><tbody>${L.map((s,i)=>`<tr><td class="cnt">${i+1}</td><td>${esc(s.author||"미상")}</td><td class="cnt">${esc(s.year||"-")}</td><td><span class="t" style="cursor:pointer" data-act="open" data-v="${s.id}">${esc(s.title)}</span></td><td>${esc(s.publisher||"-")}</td><td>${gb(s.grade)}</td><td class="small">${esc(srcAttr(s))}</td></tr>`).join("")}</tbody></table></div>`;
+  const missing=L.filter(s=>!s.author||!s.year).length;
+  return head("참고문헌","참고문헌 추출","서지는 저자·출판연도·출판사(학술지)로, 논문은 관련도 등급과 출처를 붙여 정리합니다. AI 생성 자료는 제외됩니다.",
+    `<div class="seg" role="group"><button type="button" aria-pressed="${o.mode!=="table"}" data-act="refMode" data-v="list">인용 목록</button><button type="button" aria-pressed="${o.mode==="table"}" data-act="refMode" data-v="table">서지 정보 표</button></div><button class="btn" data-act="refCopy" type="button">복사</button><button class="btn" data-act="refCsv" type="button">CSV</button><button class="btn primary" data-act="refSave" type="button">TXT로 저장</button>`)
+  + `<section class="panel" style="margin-bottom:16px"><div class="row" style="gap:18px">
+      <label class="f">최소 등급<select id="refMin">${[5,4,3,2,1].map(g=>`<option value="${g}" ${o.min===g?"selected":""}>${g}등급 이상</option>`).join("")}</select></label>
+      <label class="f">인용 양식<select id="refStyle">${styles.map(([k,l])=>`<option value="${k}" ${o.style===k?"selected":""}>${l}</option>`).join("")}</select></label>
+      <label class="check"><input type="checkbox" id="refAttr" ${o.attr?"checked":""}> 출처(수집 경로·파일·URL) 표시</label>
+      <label class="check"><input type="checkbox" id="refGroup" ${o.group?"checked":""}> 등급별로 묶기</label>
+    </div>${missing?`<p class="note" style="margin-top:12px">${missing}건은 저자나 연도가 비어 있습니다. 자료 화면의 서지 정보에서 채워 주세요.</p>`:""}</section>
+    <section class="panel">${L.length?list:`<div class="empty"><b>${o.min}등급 이상 자료가 없습니다</b>최소 등급을 낮추거나 자료를 분류하세요.</div>`}</section>`;
+}
+
+function vWrite(){
+  const d=curDraft();
+  const listHtml=`<section class="panel"><div class="panel-head"><h3>원고</h3><button class="btn sm primary" data-act="newDraft" type="button">새 원고</button></div>
+    ${S.drafts.length?`<div class="list">${S.drafts.map(x=>`<div style="padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer" data-act="openDraft" data-v="${x.id}"><div style="font-weight:600;${x.id===S.draftId?"color:var(--accent)":""}">${esc(clip(x.title,40))}</div><div class="small muted">${esc(x.kind)} · ${esc(x.depth)} · ${draftLen(x).toLocaleString()}/${n(x.target).toLocaleString()}자</div></div>`).join("")}</div>`:`<p class="muted small">새 원고를 만들어 시작하세요.</p>`}</section>`;
+  if(!d) return head("AI 집필","AI 집필","목차 추천부터 장·절별 집필, 수정까지 위키 자료를 근거로 원고를 씁니다.") + `<div class="split"><div class="panel empty"><b>원고를 선택하거나 새로 만드세요</b>작성 유형(학술논문·학위논문·강의노트), 심도(초급–전문가), 분량(2,000–20,000자)을 정하면 AI가 목차를 추천하고 절마다 본문을 씁니다.<div class="row" style="justify-content:center;margin-top:14px"><button class="btn primary" data-act="newDraft" type="button">새 원고 만들기</button></div></div>${listHtml}</div>`;
+  const total=draftLen(d), pct=Math.min(100,total/Math.max(1,n(d.target))*100);
+  const srcs=draftSources(d);
+  const busy=!!job;
+  const secHtml=(c,s)=>{
+    const live=S.live["w:"+s.id]; const L=len(s.content); const r=L/Math.max(1,s.target);
+    return `<div class="sec" data-sid="${s.id}">
+      <div class="sec-head"><input type="text" class="st" data-f="title" value="${esc(s.title)}" aria-label="절 제목"><input type="number" class="tg" data-f="target" value="${s.target}" min="100" step="100" aria-label="목표 글자 수"><span class="cnt ${L?(r>1.15?"over":r>=0.85?"good":""):""}">${L.toLocaleString()}/${n(s.target).toLocaleString()}자</span>
+        <button class="btn sm" data-act="writeSec" data-v="${s.id}" type="button" ${busy?"disabled":""}>${s.content?"다시 쓰기":"절 집필"}</button>
+        <button class="btn sm ghost" data-act="delSec" data-v="${s.id}" type="button" aria-label="절 삭제">삭제</button></div>
+      ${s.brief?`<p class="small muted">계획: ${esc(s.brief)}</p>`:""}
+      ${live!==undefined?`<div class="prose" id="live-${s.id}">${live?md(live):`<p class="muted">생각하는 중…</p>`}</div>`:
+        (S.preview && s.content?`<div class="prose">${md(s.content)}</div>`:`<textarea data-f="content" rows="${Math.min(24,Math.max(5,Math.ceil(L/60)))}" placeholder="절 집필을 누르거나 직접 쓰세요.">${esc(s.content)}</textarea>`)}
+      ${s.content&&live===undefined?`<div class="row"><select data-revsel aria-label="수정 방식"><option value="">AI 수정 방식 선택</option><option>문장을 더 간결하고 명확하게 다듬어라</option><option>학술적 문체로 다듬고 논리 연결을 강화하라</option><option>근거와 설명을 보강하여 분량을 약 30% 늘려라</option><option>핵심만 남겨 분량을 약 30% 줄여라</option><option>맞춤법, 띄어쓰기, 문법 오류만 바로잡아라</option><option>선택한 작성 심도에 맞게 난이도를 조정하라</option></select><input type="text" data-revtxt placeholder="또는 직접 지시 입력" style="flex:1 1 180px;width:auto"><button class="btn sm" data-act="revise" data-v="${s.id}" type="button" ${busy?"disabled":""}>AI 수정</button>${s.prev?`<button class="btn sm ghost" data-act="undo" data-v="${s.id}" type="button">되돌리기</button>`:""}</div>`:""}
+    </div>`;
+  };
+  return head("AI 집필", esc(d.title), `${esc(d.kind)} · ${esc(d.depth)} · 목표 ${n(d.target).toLocaleString()}자 · 참고 자료 ${srcs.length}건(${d.minGrade}등급 이상)`,
+     `<button class="btn" data-act="togglePreview" type="button">${S.preview?"편집 보기":"읽기 보기"}</button><button class="btn" data-act="draftExport" data-v="md" type="button">MD</button><button class="btn" data-act="draftExport" data-v="html" type="button">HTML</button><button class="btn" data-act="draftExport" data-v="txt" type="button">TXT</button><button class="btn danger" data-act="delDraft" type="button">삭제</button>`)
+  + `<div class="split"><div class="stack" style="min-width:0">
+      <section class="panel stack" id="draftForm">
+        <label class="f">제목<input type="text" data-k="title" value="${esc(d.title)}"></label>
+        <div class="row" style="gap:16px;align-items:flex-end">
+          <div class="f"><span>작성 유형</span><div class="seg">${WKINDS.map(k=>`<button type="button" aria-pressed="${d.kind===k}" data-act="dset" data-k="kind" data-v="${k}">${k}</button>`).join("")}</div></div>
+          <div class="f"><span>작성 심도</span><div class="seg">${Object.keys(DEPTH).map(k=>`<button type="button" aria-pressed="${d.depth===k}" data-act="dset" data-k="depth" data-v="${k}">${k}</button>`).join("")}</div></div>
+          <label class="f">참고 자료 등급<select data-k="minGrade">${[5,4,3,2,1].map(g=>`<option value="${g}" ${n(d.minGrade)===g?"selected":""}>${g}등급 이상</option>`).join("")}</select></label>
+        </div>
+        <label class="f">문서 분량: <b style="color:var(--ink)" id="tgtVal">${n(d.target).toLocaleString()}자</b><input type="range" data-k="target" min="2000" max="20000" step="500" value="${n(d.target)}" style="accent-color:var(--accent)"></label>
+        <p class="small muted">${DEPTH[d.depth]}</p>
+        <div class="row"><button class="btn primary" data-act="toc" type="button" ${busy?"disabled":""}>${d.toc.length?"목차 다시 추천":"AI 목차 추천"}</button>${d.toc.length?`<button class="btn" data-act="writeAll" type="button" ${busy?"disabled":""}>빈 절 모두 집필</button><button class="btn" data-act="addCh" type="button">장 추가</button>`:`<button class="btn" data-act="addCh" type="button">목차 직접 만들기</button>`}</div>
+        <div class="row small"><span class="muted">진행</span><span class="meter"><i style="width:${pct.toFixed(1)}%"></i></span><span class="cnt">${total.toLocaleString()} / ${n(d.target).toLocaleString()}자</span></div>
+      </section>
+      ${d.toc.map(c=>`<section class="chapter" data-cid="${c.id}"><header><input type="text" data-cf="title" value="${esc(c.title)}" aria-label="장 제목"><span class="cnt">${c.secs.reduce((a,s)=>a+len(s.content),0).toLocaleString()}자</span><button class="btn sm" data-act="writeCh" data-v="${c.id}" type="button" ${busy?"disabled":""}>장 전체 집필</button><button class="btn sm ghost" data-act="addSec" data-v="${c.id}" type="button">절 추가</button><button class="btn sm ghost" data-act="delCh" data-v="${c.id}" type="button">장 삭제</button></header>${c.secs.map(s=>secHtml(c,s)).join("")}</section>`).join("")}
+    </div>
+    <aside class="stack">${listHtml}
+      <section class="panel"><h3>집필 근거 자료</h3>${srcs.length?`<ol class="small" style="padding-left:18px;margin:0">${srcs.map(s=>`<li style="margin-bottom:4px">${esc(clip(s.title,50))} <span class="muted">${n(s.grade)}등급</span></li>`).join("")}</ol>`:`<p class="small muted">${d.minGrade}등급 이상 자료가 없습니다. 등급 기준을 낮추거나 자료를 분류하세요.</p>`}</section>
+    </aside></div>`;
+}
+
+function vExchange(){
+  const e=S.exp;
+  return head("Obsidian 교류","Obsidian ↔ AI WIKI","Obsidian 노트, 구글 드라이브와 위키 데이터를 주고받습니다. 파일은 .md, .txt, .json, .html을 지원합니다.")
+  + `<div class="grid g2">
+    <section class="panel stack"><h2>가져오기</h2>
+      <div class="drop" id="drop" data-act="pick" data-v=".md,.txt,.json,.html,.htm" tabindex="0" role="button"><b>Obsidian 노트나 백업 파일을 끌어다 놓기</b><span class="muted small">여러 파일을 한 번에 올릴 수 있습니다. 프런트매터의 title, tags, author, year, grade, topic을 읽고 본문의 #태그는 키워드로 가져옵니다.</span></div>
+      <div class="row"><button class="btn" data-act="pickDir" type="button">볼트 폴더 선택</button><span class="small muted">AI WIKI에서 내보낸 JSON 백업을 올리면 자료, 원고, 논문 정보가 복원됩니다.</span></div>
+    </section>
+    <section class="panel stack"><h2>내보내기</h2>
+      <div class="f"><span>범위</span><div class="seg">${[["all","전체"],["grade","등급 기준"],["sel",`선택한 자료(${S.sel.size})`]].map(([k,l])=>`<button type="button" aria-pressed="${e.scope===k}" data-act="expScope" data-v="${k}">${l}</button>`).join("")}</div></div>
+      ${e.scope==="grade"?`<label class="f">최소 등급<select id="expMin">${[5,4,3,2,1].map(g=>`<option value="${g}" ${n(e.min)===g?"selected":""}>${g}등급 이상</option>`).join("")}</select></label>`:""}
+      <p class="small muted">대상 자료 ${expList().length}건${e.scope==="all"?` · 원고 ${S.drafts.length}건 포함`:""}</p>
+      <div class="grid g2" style="gap:8px">
+        <button class="btn" data-act="export" data-v="vault" type="button">Obsidian 볼트 (.zip, 노트별 .md)</button>
+        <button class="btn" data-act="export" data-v="json" type="button">JSON (전체 백업)</button>
+        <button class="btn" data-act="export" data-v="txt" type="button">TXT</button>
+        <button class="btn" data-act="export" data-v="html" type="button">HTML</button>
+      </div>
+      <button class="btn primary" data-act="saveApp" type="button">AI WIKI 앱 전체를 HTML 파일로 저장 (현재 데이터 포함)</button>
+      <p class="small muted">저장한 파일을 브라우저로 열면 이 화면 그대로 쓸 수 있습니다. 자료는 그 브라우저에 저장되며, AI 기능과 원문 PDF 다운로드는 Claude 안에서 열 때만 동작합니다.</p>
+      <p class="note">볼트 zip을 Obsidian 볼트 폴더에 풀면 자료마다 프런트매터(등급, 주제, 태그)가 붙은 노트와 주제별 색인 노트가 생깁니다. 노트를 고친 뒤 다시 가져오면 같은 자료가 갱신됩니다.</p>
+    </section></div>
+    <section class="panel stack" style="margin-top:16px"><div class="panel-head"><h2>Obsidian ↔ 구글 드라이브</h2></div>
+      <p class="small muted">Obsidian 볼트를 구글 드라이브에 동기화해 두면, 위키 자료를 드라이브에 노트로 보내고 드라이브의 노트를 위키로 가져와 서로 주고받을 수 있습니다.</p>
+      <div class="grid g2">
+        <div class="stack"><h3>위키 → 드라이브</h3><p class="small muted">위 '범위'에서 고른 자료 ${expList().length}건을 프런트매터가 붙은 .md 노트와 색인 노트로 드라이브에 저장합니다.</p><button class="btn primary" data-act="driveExport" type="button" ${cap.mcp&&!job?"":"disabled"}>드라이브로 보내기</button></div>
+        <div class="stack"><h3>드라이브 → 위키</h3>
+          <div class="row" style="flex-wrap:nowrap"><input type="search" id="dsyncQ" value="${esc(S.dsync.q)}" placeholder="파일 이름 검색어 (예: .md, 볼트 폴더명)"><button class="btn" data-act="dsyncFind" type="button" ${cap.mcp&&!S.dsync.busy?"":"disabled"}>찾기</button></div>
+          ${S.dsync.items.length?`<p class="small">노트 ${S.dsync.items.length}건: ${esc(S.dsync.items.slice(0,6).map(f=>f.name).join(", "))}${S.dsync.items.length>6?" …":""}</p><button class="btn primary" data-act="dsyncImport" type="button" ${S.dsync.busy?"disabled":""}>${S.dsync.items.length}건 가져오기</button>`:""}
+        </div>
+      </div>
+      ${cap.mcp?"":`<p class="note">구글 드라이브 연동은 Claude 앱이나 claude.ai에서 Google Drive 커넥터를 연결했을 때 동작합니다.</p>`}
+    </section>
+    <section class="panel" style="margin-top:16px"><div class="panel-head"><h2>데이터 삭제</h2></div>
+      <div class="row"><button class="btn danger" data-act="delExamples" type="button">예시 자료 삭제</button><button class="btn danger" data-act="delUncl" type="button">1등급(무관) 자료 삭제</button><button class="btn danger" data-act="delAll" type="button">모든 자료 삭제</button></div>
+      <p class="small muted" style="margin-top:8px">삭제 전에 JSON 백업을 받아 두세요. 삭제한 자료는 되돌릴 수 없습니다.</p></section>`;
+}
+
+let lastView=null;
+function render(){
+  renderNav();
+  const main=$("#main"); const y=window.scrollY;
+  if(S.view!=="home" && !S.pid) S.view="home";
+  const v={home:vHome, dash:vDash, collect:vCollect, library:vLibrary, detail:vDetail, analysis:vAnalysis, thesis:vThesis, refs:vRefs, write:vWrite, exchange:vExchange}[S.view]||vDash;
+  const VN=Object.fromEntries(NAV); VN.detail="자료";
+  main.innerHTML=(S.view!=="home"?`<nav class="crumb" aria-label="현재 위치"><button type="button" data-act="go" data-v="home">AI WIKI</button><span>›</span><button type="button" data-act="go" data-v="dash">${esc(clip(curProj()?.name||"",30))}</button><span>›</span><b>${VN[S.view]||""}</b></nav>`:"")+v();
+  if(S.view==="collect") renderQueue();
+  if(lastView===S.view) window.scrollTo(0,y); else window.scrollTo(0,0);
+  lastView=S.view; pending=false;
+}
+let pending=false;
+function editing(){ const a=document.activeElement; return a && $("#main").contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type!=="checkbox"; }
+function softRender(force){ if(!force && editing()){ pending=true; return; } render(); }
+document.addEventListener("focusout", ()=>{ setTimeout(()=>{ if(pending && !editing()) render(); }, 150); });
+
+/* ---------- 이벤트 ---------- */
+let pickCtx=null;
+const fileInput=$("#filePick");
+fileInput.addEventListener("change", ()=>{ const fs=[...fileInput.files]; fileInput.value=""; fileInput.removeAttribute("webkitdirectory"); if(!fs.length) return; route(fs); });
+function route(fs){
+  if(S.view==="exchange") importExchange(fs.filter(f=>/\.(md|txt|json|html?)$/i.test(f.name)));
+  else ingestFiles(fs);
+}
+document.addEventListener("dragover", e=>{ const d=e.target.closest?.("#drop"); if(d){ e.preventDefault(); d.classList.add("over"); } });
+document.addEventListener("dragleave", e=>{ const d=e.target.closest?.("#drop"); if(d) d.classList.remove("over"); });
+document.addEventListener("drop", e=>{ const d=e.target.closest?.("#drop"); if(!d) return; e.preventDefault(); d.classList.remove("over"); const fs=[...e.dataTransfer.files]; if(fs.length) route(fs); });
+document.addEventListener("keydown", e=>{
+  if(e.key==="Enter" && e.target.dataset && e.target.dataset.np && e.target.type==="text"){ e.preventDefault(); createProject(); return; } if((e.key==="Enter"||e.key===" ") && e.target.id==="drop"){ e.preventDefault(); e.target.click(); }
+  if(e.key==="Enter"){ const m={driveQ:driveFind, acadQ:acadSearch, dsyncQ:dsyncFind}[e.target.id]; if(m){ e.preventDefault(); m(); } } });
+
+const go = v => { if(v!=="home" && !S.pid){ toast("먼저 대문에서 프로젝트를 만들거나 고르세요."); S.view="home"; S.showNew=!S.projects.length; render(); return; } S.view=v; render(); };
+document.addEventListener("click", async e=>{
+  const el=e.target.closest("[data-act]"); if(!el) return;
+  const a=el.dataset.act, v=el.dataset.v;
+  const cur = () => S.sources.find(x=>x.id===S.srcId);
+  switch(a){
+    case "go": if(v==="write" && !S.draftId && S.drafts[0]) S.draftId=S.drafts[0].id; go(v); break;
+    case "tab": S.tab=v; render(); break;
+    case "pick": fileInput.accept=v; fileInput.click(); break;
+    case "pickDir": fileInput.accept=""; fileInput.setAttribute("webkitdirectory",""); fileInput.click(); break;
+    case "open": S.srcId=v; go("detail"); break;
+    case "kw": S.f={...S.f, q:v}; go("library"); break;
+    case "classifyUncl": classifyMany(S.sources.filter(s=>!n(s.grade))); break;
+    case "classifyOne": { const s=cur(); if(s) classifyMany([s]); break; }
+    case "analyze": analyzeSource(v); render(); break;
+    case "copyAn": { const s=cur(); copy(s?.analysis||""); break; }
+    case "setGrade": { const s=cur(); if(!s) break; await Store.saveSource({...s, grade:n(v), gradeBy:"user"}); render(); break; }
+    case "dlPdf": { const s=cur(); if(!s?.pdfAsset) break; try{ const r=await fetch("/_blob/"+s.pdfAsset); if(!r.ok) throw 0; const b=await r.blob(); await saveFile((s.fileName||s.title+".pdf").replace(/[\\/:*?"<>|]/g," "), b); }catch{ toast("보관된 원문을 찾지 못했습니다.", true); } break; }
+    case "delOne": { const s=cur(); if(s && await ask(`'${clip(s.title,40)}' 자료를 삭제할까요? 분석 보고서와 내 관점도 함께 지워집니다.`)){ if(s.pdfAsset && cap.assets) cap.assets.delete(s.pdfAsset).catch(()=>{}); await Store.deleteSource(s.id); toast("삭제했습니다."); go("library"); } break; }
+    case "sel": if(el.checked) S.sel.add(v); else S.sel.delete(v); render(); break;
+    case "selAll": { const L=filtered(); if(el.checked) L.forEach(s=>S.sel.add(s.id)); else L.forEach(s=>S.sel.delete(s.id)); render(); break; }
+    case "selNone": S.sel.clear(); render(); break;
+    case "bulkClassify": classifyMany(S.sources.filter(s=>S.sel.has(s.id))); break;
+    case "bulkSyn": S.syn.ids=new Set(S.sel); go("analysis"); break;
+    case "bulkExport": S.exp.scope="sel"; go("exchange"); break;
+    case "bulkDel": { const L=S.sources.filter(s=>S.sel.has(s.id)); if(L.length && await ask(`선택한 ${L.length}건을 삭제할까요?`)){ for(const s of L){ if(s.pdfAsset&&cap.assets) cap.assets.delete(s.pdfAsset).catch(()=>{}); await Store.deleteSource(s.id);} toast(`${L.length}건을 삭제했습니다.`); render(); } break; }
+    case "delExamples": { const L=S.sources.filter(s=>s.isExample); if(!L.length){ toast("예시 자료가 없습니다."); break; } if(await ask(`예시 자료 ${L.length}건을 삭제할까요?`)){ for(const s of L) await Store.deleteSource(s.id); for(const d of S.drafts.filter(d=>d.isExample)) await Store.deleteDraft(d.id); toast("예시 자료를 삭제했습니다."); render(); } break; }
+    case "delUncl": { const L=S.sources.filter(s=>n(s.grade)===1); if(!L.length){ toast("1등급 자료가 없습니다."); break; } if(await ask(`관련도 1등급(무관) 자료 ${L.length}건을 삭제할까요?`)){ for(const s of L) await Store.deleteSource(s.id); toast("삭제했습니다."); render(); } break; }
+    case "delAll": { if(!S.sources.length) break; if(await ask(`모든 자료 ${S.sources.length}건을 삭제할까요? 원고와 논문 정보는 남습니다.`,"모두 삭제")){ for(const s of [...S.sources]){ if(s.pdfAsset&&cap.assets) cap.assets.delete(s.pdfAsset).catch(()=>{}); await Store.deleteSource(s.id);} toast("모든 자료를 삭제했습니다."); render(); } break; }
+    case "scrape": {
+      const url=$("#webUrl").value.trim(); if(!/^https?:\/\//.test(url)){ toast("http:// 또는 https://로 시작하는 주소를 입력하세요."); break; }
+      el.disabled=true; el.textContent="가져오는 중…";
+      try{ const r=await scrapeWeb(url); const t=trimText(r.md); if(!t.text) throw {code:"tool_error"};
+        const src=newSource({ch:"web", url, title:r.title||url, text:t.text, cut:t.cut, publisher:(()=>{try{return new URL(url).hostname}catch{return ""}})()});
+        await Store.saveSource(src); S.queue.unshift({name:src.title, st:"저장됨", id:src.id});
+        render(); if($("#optAuto")?.checked!==false && cap.sample) classifyMany([src]);
+      }catch(err){ toast(MCP_ERR[err.code]||"웹 페이지를 가져오지 못했습니다. 본문을 직접 붙여 넣으세요.", true); }
+      finally{ const b=$('[data-act="scrape"]'); if(b){ b.disabled=false; b.textContent="가져오기"; } }
+      break; }
+    case "saveWeb": {
+      const text=$("#webText").value.trim(); if(!text){ toast("본문을 붙여 넣으세요."); break; }
+      const t=trimText(text); const url=$("#webUrl").value.trim();
+      const src=newSource({ch:"web", url, title:$("#webTitle").value.trim()||url||"웹 자료", publisher:$("#webPub").value.trim(), text:t.text});
+      const auto=$("#optAuto")?.checked; await Store.saveSource(src); S.queue.unshift({name:src.title, st:"저장됨", id:src.id}); render(); if(auto&&cap.sample) classifyMany([src]); break; }
+    case "saveManual": {
+      const text=$("#mText").value.trim(); if(!text){ toast("내용을 입력하세요."); break; }
+      const src=newSource({ch:"manual", title:$("#mTitle").value.trim()||clip(text,30), author:$("#mAuthor").value.trim(), year:$("#mYear").value.trim(), text:trimText(text).text, kind:"메모"});
+      const auto=$("#optAuto")?.checked; await Store.saveSource(src); S.queue.unshift({name:src.title, st:"저장됨", id:src.id}); render(); if(auto&&cap.sample) classifyMany([src]); break; }
+    case "synType": S.syn.type=v; render(); break;
+    case "synSel": if(el.checked) S.syn.ids.add(v); else S.syn.ids.delete(v); render(); break;
+    case "synPick": S.syn.ids = n(v) ? new Set(S.sources.filter(s=>n(s.grade)>=n(v)).map(s=>s.id)) : new Set(); render(); break;
+    case "synth": synthesize(); render(); break;
+    case "synCopy": copy(S.syn.last?.text||""); break;
+    case "synSave": { const L=S.syn.last; if(!L) break; const src=newSource({ch:"ai", kind:"보고서", title:`${S.syn.type} · ${stamp()}`, author:"AI WIKI", year:String(new Date().getFullYear()), text:L.text+"\n\n---\n자료 번호표\n"+L.refs, analysis:L.text, myView:S.syn.view, summary:clip(extractSec(L.text,1)||L.text,400), topic:S.thesis.topic?"종합 분석":"", grade:0}); await Store.saveSource(src); toast("위키에 'AI 생성' 자료로 저장했습니다."); S.srcId=src.id; go("detail"); break; }
+    case "insight": thesisInsight(); render(); break;
+    case "regradeAll": { if(!S.sources.length){ toast("자료가 없습니다."); break; } if(await ask(`자료 ${S.sources.length}건의 등급을 현재 논문 정보로 다시 매길까요? 직접 지정한 등급도 바뀝니다.`,"다시 매기기",false)) classifyMany(S.sources.filter(s=>s.ch!=="ai")); break; }
+    case "refCopy": copy(refsText(false)); break;
+    case "refSave": saveFile(`참고문헌-${stamp()}.txt`, refsText(true)); break;
+    case "newDraft": { const d=newDraft(); await Store.saveDraft(d); S.draftId=d.id; go("write"); break; }
+    case "openDraft": S.draftId=v; render(); break;
+    case "delDraft": { const d=curDraft(); if(d && await ask(`'${clip(d.title,40)}' 원고를 삭제할까요?`)){ await Store.deleteDraft(d.id); S.draftId=S.drafts[0]?.id||null; render(); } break; }
+    case "dset": { const d=curDraft(); if(!d) break; d[el.dataset.k]=v; await Store.saveDraft(d); render(); break; }
+    case "toc": recommendToc(); render(); break;
+    case "addCh": { const d=curDraft(); d.toc.push({id:uid(), title:`${["Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ","Ⅶ","Ⅷ","Ⅸ","Ⅹ"][d.toc.length]||d.toc.length+1}. 새 장`, secs:[{id:uid(), title:"1. 새 절", target:800, brief:"", content:"", prev:""}]}); await Store.saveDraft(d); render(); break; }
+    case "addSec": { const d=curDraft(); const c=d.toc.find(x=>x.id===v); c.secs.push({id:uid(), title:`${c.secs.length+1}. 새 절`, target:800, brief:"", content:"", prev:""}); await Store.saveDraft(d); render(); break; }
+    case "delCh": { const d=curDraft(); const c=d.toc.find(x=>x.id===v); if(c && await ask(`'${clip(c.title,30)}' 장과 그 안의 본문을 삭제할까요?`)){ d.toc=d.toc.filter(x=>x.id!==v); await Store.saveDraft(d); render(); } break; }
+    case "delSec": { const d=curDraft(); const f=findSec(d,v); if(f.s && (!f.s.content || await ask(`'${clip(f.s.title,30)}' 절을 삭제할까요?`))){ f.c.secs.splice(f.i,1); await Store.saveDraft(d); render(); } break; }
+    case "writeSec": writeMany([v], "절 집필"); break;
+    case "writeCh": { const d=curDraft(); const c=d.toc.find(x=>x.id===v); const ids=c.secs.map(s=>s.id); if(c.secs.some(s=>s.content) && !(await ask("이 장에 이미 쓴 절이 있습니다. 모두 다시 쓸까요? (각 절은 되돌리기로 이전 본문을 복구할 수 있습니다)","다시 쓰기",false))) break; writeMany(ids, "장 집필"); break; }
+    case "writeAll": { const d=curDraft(); const ids=d.toc.flatMap(c=>c.secs).filter(s=>!s.content).map(s=>s.id); if(!ids.length){ toast("비어 있는 절이 없습니다."); break; } writeMany(ids, "전체 집필"); break; }
+    case "revise": { const box=el.closest(".row"); const instr=($("[data-revtxt]",box).value.trim()||$("[data-revsel]",box).value); reviseSection(v, instr); break; }
+    case "undo": { const d=curDraft(); const f=findSec(d,v); if(f.s?.prev!=null){ const t=f.s.content; f.s.content=f.s.prev; f.s.prev=t; await Store.saveDraft(d); render(); toast("이전 본문으로 되돌렸습니다. 다시 누르면 수정본으로 돌아갑니다."); } break; }
+    case "togglePreview": S.preview=!S.preview; render(); break;
+    case "draftExport": { const d=curDraft(); const m=draftMarkdown(d); const base=d.title.replace(/[\\/:*?"<>|]/g," ").slice(0,60)||"원고";
+      if(v==="md") saveFile(base+".md", m); else if(v==="txt") saveFile(base+".txt", m.replace(/^#+\s*/gm,"").replace(/\*\*/g,"")); else saveFile(base+".html", htmlDoc(d.title, md(m))); break; }
+    case "expScope": S.exp.scope=v; render(); break;
+    case "export": doExport(v); break;
+    case "newProj": S.showNew=true; S.view="home"; render(); setTimeout(()=>{ $("#newProj")?.scrollIntoView({behavior:"smooth",block:"start"}); $("#npName")?.focus(); },30); break;
+    case "hideNew": S.showNew=false; render(); break;
+    case "createProj": createProject(); break;
+    case "openProj": setProject(v); S.view="dash"; render(); break;
+    case "renameProj": { const p=S.projects.find(x=>x.id===v); if(!p) break; const nm=await promptText("새 프로젝트 이름", p.name); if(nm && nm!==p.name){ if(S.projects.some(x=>x.name===nm)){ toast("같은 이름의 프로젝트가 있습니다."); break; } p.name=nm; await Store.saveProject(p); toast("이름을 바꿨습니다. 이미 만든 폴더 이름은 그대로입니다."); render(); } break; }
+    case "delProj": deleteProjectFlow(v); break;
+    case "mkObs": { const p=S.projects.find(x=>x.id===v); if(p) makeObsidianFolder(p).then(render); break; }
+    case "mkDrive": { const p=S.projects.find(x=>x.id===v); if(p) makeDriveFolders(p); break; }
+    case "driveFind": driveFind(); break;
+    case "drivePick": if(el.checked) S.drive.picked.add(v); else S.drive.picked.delete(v); render(); break;
+    case "drivePickTop": S.drive.picked=new Set(S.drive.items.filter(f=>!f.have).slice(0,20).map(f=>f.id)); render(); break;
+    case "drivePickNone": S.drive.picked=new Set(); render(); break;
+    case "driveImport": driveImport(); break;
+    case "driveExport": driveExport(); break;
+    case "dsyncFind": dsyncFind(); break;
+    case "dsyncImport": dsyncImport(); break;
+    case "acadSite": S.acad.site=v; S.acad.items=[]; S.acad.note=""; render(); break;
+    case "acadSearch": acadSearch(); break;
+    case "acadFetch": acadFetch(v); break;
+    case "acadPaste": acadPaste(); break;
+    case "refMode": S.refOpt.mode=v; render(); break;
+    case "refCsv": { const L=refList(); const q=x=>`"${String(x??"").replace(/"/g,'""')}"`; saveFile(`서지정보-${stamp()}.csv`, "\ufeff"+["저자,출판연도,제목,출판사·학술지,관련도등급,출처,URL", ...L.map(s=>[s.author,s.year,s.title,s.publisher,n(s.grade),CH[s.ch]||s.ch,s.url].map(q).join(","))].join("\n")); break; }
+    case "saveApp": saveFile(`AI_WIKI-${stamp()}.html`, buildStandalone()); break;
+  }
+});
+async function copy(t){ try{ await navigator.clipboard.writeText(t); toast("복사했습니다."); }catch{ const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy"); toast("복사했습니다.");}catch{toast("복사하지 못했습니다.",true);} ta.remove(); } }
+
+document.addEventListener("input", e=>{
+  const t=e.target;
+  if(t.id==="fq"){ S.f.q=t.value; debounce("fq", ()=>{ const pos=t.selectionStart; render(); const n2=$("#fq"); if(n2){ n2.focus(); n2.setSelectionRange(pos,pos);} }, 250); return; }
+  if(t.id==="myView"){ const id=t.dataset.id; $("#mvState").textContent="입력 중…"; debounce("mv"+id, async ()=>{ const s=S.sources.find(x=>x.id===id); if(!s) return; await Store.saveSource({...s, myView:t.value}); const st=$("#mvState"); if(st) st.textContent="저장됨"; }, 900); return; }
+  if(t.id==="synView"){ S.syn.view=t.value; return; }
+  if(t.id==="driveQ"){ S.drive.q=t.value; return; }
+  if(t.dataset.np){ const k=t.dataset.np; S.np[k]= t.type==="checkbox" ? t.checked : t.value; if(k==="name"){ const tr=$(".tree span:nth-child(2)"); if(tr) tr.textContent=`└ ${projFolderName({name:t.value||"프로젝트명"})}/`; } return; }
+  if(t.id==="acadQ"){ S.acad.q=t.value; return; }
+  if(t.id==="dsyncQ"){ S.dsync.q=t.value; return; }
+  const mf=t.closest("#metaForm");
+  if(mf){ const id=mf.dataset.id, k=t.dataset.k; debounce("meta"+id+k, async ()=>{ const s=S.sources.find(x=>x.id===id); if(!s) return; const val = k==="keywords" ? t.value.split(/[,，;；]/).map(x=>x.trim()).filter(Boolean) : t.value; await Store.saveSource({...s, [k]:val}); }, 800); return; }
+  const tf=t.closest("#thesisForm");
+  if(tf && t.dataset.k){ const k=t.dataset.k; S.thesis[k] = k==="keywords" ? t.value.split(/[,，;；]/).map(x=>x.trim()).filter(Boolean) : t.value; $("#thState").textContent="입력 중…"; debounce("thesis", async ()=>{ await Store.saveThesis(); const st=$("#thState"); if(st) st.textContent="저장됨"; }, 900); return; }
+  const df=t.closest("#draftForm");
+  if(df && t.dataset.k){ const d=curDraft(); if(!d) return; const k=t.dataset.k; d[k] = (k==="target"||k==="minGrade") ? n(t.value) : t.value; if(k==="target") $("#tgtVal").textContent=n(t.value).toLocaleString()+"자"; debounce("draft"+d.id, ()=>Store.saveDraft(d), 700); return; }
+  const sec=t.closest(".sec");
+  if(sec && t.dataset.f){ const d=curDraft(); const f=findSec(d, sec.dataset.sid); if(!f.s) return; const k=t.dataset.f; f.s[k] = k==="target" ? Math.max(100,n(t.value)) : t.value;
+    if(k==="content"){ const c=$(".cnt",sec); const L=len(t.value); c.textContent=`${L.toLocaleString()}/${n(f.s.target).toLocaleString()}자`; t.rows=Math.min(24,Math.max(5,Math.ceil(L/60))); }
+    debounce("draft"+d.id, ()=>Store.saveDraft(d), 900); return; }
+  const ch=t.closest(".chapter");
+  if(ch && t.dataset.cf){ const d=curDraft(); const c=d.toc.find(x=>x.id===ch.dataset.cid); c.title=t.value; debounce("draft"+d.id, ()=>Store.saveDraft(d), 900); return; }
+});
+document.addEventListener("change", e=>{
+  const t=e.target;
+  if(t.id==="projSel"){ if(t.value){ setProject(t.value); if(S.view==="home") S.view="dash"; } render(); return; }
+  if(t.dataset && t.dataset.np && t.type==="checkbox"){ S.np[t.dataset.np]=t.checked; return; }
+  if(t.id==="ftopic"){ S.f.topic=t.value; render(); }
+  else if(t.id==="fch"){ S.f.ch=t.value; render(); }
+  else if(t.id==="fgrade"){ S.f.grade=t.value; render(); }
+  else if(t.id==="fsort"){ S.f.sort=t.value; render(); }
+  else if(t.id==="refMin"){ S.refOpt.min=n(t.value); render(); }
+  else if(t.id==="refStyle"){ S.refOpt.style=t.value; render(); }
+  else if(t.id==="refAttr"){ S.refOpt.attr=t.checked; render(); }
+  else if(t.id==="refGroup"){ S.refOpt.group=t.checked; render(); }
+  else if(t.id==="expMin"){ S.exp.min=n(t.value); render(); }
+  else if(t.closest("#draftForm") && t.dataset.k==="minGrade"){ const d=curDraft(); d.minGrade=n(t.value); Store.saveDraft(d).then(render); }
+  else if(t.closest("#draftForm") && t.dataset.k==="target"){ render(); }
+});
+
+boot();
+})();
+</script>
+
+</body></html>
